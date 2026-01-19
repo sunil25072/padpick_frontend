@@ -46,6 +46,9 @@
             <button class="edit-btn">
               <a class="love" href="./my_property.html">See your Property</a>
             </button>
+            <button class="edit-btns" id="deleteBtn">
+                <a class="love">Delete Profile</a>
+            </button>
 
             <p id="message" style="color:red;text-align:center;"></p>
         </div>
@@ -57,39 +60,88 @@
 
     <!-- 🔥 PROFILE JS -->
     <script>
-      const userId = localStorage.getItem("user_id");
-      const message = document.getElementById("message");
+    const userId = localStorage.getItem("user_id");
+    const message = document.getElementById("message");
 
-      if (!userId) {
+    if (!userId) {
         message.innerText = "Please login again";
-      } else {
+    } else {
         loadProfile();
-      }
+    }
 
-      async function loadProfile() {
+    document
+        .getElementById("deleteBtn")
+        .addEventListener("click", deleteProfile);
+
+    async function loadProfile() {
         try {
-          const res = await fetch(
-            `http://localhost:8000/users/${userId}/profile`
-          );
+            const res = await fetch(
+                `http://localhost:8000/users/${userId}/profile`
+            );
 
-          const data = await res.json();
+            const data = await res.json();
 
-          if (!res.ok) {
-            message.innerText = data.detail || "Failed to load profile";
-            return;
-          }
+            if (!res.ok) {
+                message.innerText =
+                    data.detail || "Failed to load profile";
+                return;
+            }
 
-          // ✅ Fill profile data
-          document.getElementById("username").innerText = data.username;
-          document.getElementById("email").innerText = data.email;
-          document.getElementById("mobile").innerText = data.mobile_number;
-          document.getElementById("location").innerText = data.location;
+            document.getElementById("username").innerText =
+                data.username;
+            document.getElementById("email").innerText =
+                data.email;
+            document.getElementById("mobile").innerText =
+                data.mobile_number;
+            document.getElementById("location").innerText =
+                data.location;
 
-        } catch (err) {
-          message.innerText = "Backend not reachable";
+        } catch (error) {
+            message.innerText = "Backend not reachable";
         }
-      }
-    </script>
+    }
+
+    async function deleteProfile() {
+        if (!userId) {
+            message.innerText = "Please login again";
+            return;
+        }
+
+        const confirmDelete = confirm(
+            "Are you sure you want to delete your profile?"
+        );
+
+        if (!confirmDelete) {
+            return;
+        }
+
+        try {
+            const res = await fetch(
+                `http://localhost:8000/users/${userId}`,
+                {
+                    method: "DELETE",
+                }
+            );
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                message.innerText =
+                    data.detail || "Delete failed";
+                return;
+            }
+
+            alert("Profile deleted successfully");
+
+            localStorage.removeItem("user_id");
+
+            window.location.href = "../../index.html";
+
+        } catch (error) {
+            message.innerText = "Backend not reachable";
+        }
+    }
+</script>
 
 </body>
 </html>
