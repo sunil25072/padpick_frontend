@@ -8,40 +8,83 @@
 </head>
 <body>
 
-
 <div class="profile-container">
-<h2>Edit Profile</h2>
+  <h2>Edit Profile</h2>
 
+  <!-- IMPORTANT -->
+  <form class="profile-form" onsubmit="updateProfile(event)">
 
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="username" placeholder="Enter your name">
+    </div>
 
+    <div class="form-group">
+      <label>Phone</label>
+      <input type="tel" id="mobile_number" placeholder="Enter your phone number">
+    </div>
 
-<form class="profile-form">
-<div class="form-group">
-<label>Full Name</label>
-<input type="text" placeholder="Enter your name">
+    <div class="form-group">
+      <label>Location</label>
+      <input type="text" id="location" placeholder="Enter your location">
+    </div>
+
+    <button class="save-btn" type="submit">Save Changes</button>
+
+    <p id="message" style="text-align:center;color:red;"></p>
+  </form>
 </div>
 
+<script>
+  async function updateProfile(event) {
+    event.preventDefault(); // stop page reload
 
+    const userId = localStorage.getItem("user_id");
+    const message = document.getElementById("message");
 
+    if (!userId) {
+      message.innerText = "Please login again";
+      return;
+    }
 
+    const payload = {
+      username: document.getElementById("username").value,
+      mobile_number: document.getElementById("mobile_number").value,
+      location: document.getElementById("location").value
+    };
 
-<div class="form-group">
-<label>Phone</label>
-<input type="tel" placeholder="Enter your phone number">
-</div>
+    try {
+      const res = await fetch(
+        `http://localhost:8000/users/${userId}/profile`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        }
+      );
 
-<div class="form-group">
-<label>Location</label>
-<input type="tel" placeholder="Enter your phone number">
-</div>
+      const data = await res.json();
 
+      if (!res.ok) {
+        message.innerText = data.detail || "Update failed";
+        return;
+      }
 
+      message.style.color = "green";
+      message.innerText = "Profile updated successfully";
 
+      // optional redirect
+      setTimeout(() => {
+        window.location.href = "./profile.html";
+      }, 800);
 
-<button class="save-btn" type="submit"><a class="love" href="./profile.html"> Save Changes</a></button>
-</form>
-</div>
-
+    } catch (error) {
+      message.innerText = "Backend not reachable";
+    }
+  }
+</script>
 
 </body>
 </html>
