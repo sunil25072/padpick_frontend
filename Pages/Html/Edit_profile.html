@@ -28,73 +28,106 @@
             <input type="text" id="location" placeholder="Enter your location">
         </div>
 
-        <!-- 🔥 IMAGE URL INPUT -->
+        <!-- 🔥 IMAGE SELECT -->
         <div class="form-group">
-            <label>Profile Image URL</label>
-            <input
-                type="text"
-                id="profile_image"
-                placeholder="Paste cloud image URL">
+            <label>Profile Image</label>
+            <input type="file" id="profile_image" accept="image/*">
         </div>
+
+        <!-- 🔥 IMAGE PREVIEW -->
+        <img
+            id="previewImg"
+            src="../../Asset/Spider-Man & Gwen Aesthetic_.jpg"
+            width="120"
+            style="margin-top:10px;border-radius:50%;"
+        >
 
         <button class="save-btn" type="submit">
             Save Changes
         </button>
 
         <p id="message" style="text-align:center;color:red;"></p>
+
     </form>
 </div>
 
 <script>
-    async function updateProfile(event) {
-        event.preventDefault();
+async function updateProfile(event) {
+    event.preventDefault();
 
-        const userId = localStorage.getItem("user_id");
-        const message = document.getElementById("message");
+    const userId = localStorage.getItem("user_id");
+    const message = document.getElementById("message");
 
-        if (!userId) {
-            message.innerText = "Please login again";
-            return;
-        }
+    if (!userId) {
+        message.innerText = "Please login again";
+        return;
+    }
 
-        const payload = {
-            username: document.getElementById("username").value,
-            mobile_number: document.getElementById("mobile_number").value,
-            location: document.getElementById("location").value,
-            profile_image: document.getElementById("profile_image").value
-        };
+    const username = document.getElementById("username").value;
+    const mobile = document.getElementById("mobile_number").value;
+    const location = document.getElementById("location").value;
+    const imageFile = document.getElementById("profile_image").files[0];
 
-        try {
-            const res = await fetch(
-                `http://localhost:8000/users/${userId}/profile`,
+    let imageUrl = null;
+
+    try {
+        // 🔥 CLOUDINARY UPLOAD
+        if (imageFile) {
+            const formData = new FormData();
+            formData.append("file", imageFile);
+            formData.append("upload_preset", "YOUR_UPLOAD_PRESET");
+
+            const cloudRes = await fetch(
+                "https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload",
                 {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(payload)
+                    method: "POST",
+                    body: formData
                 }
             );
 
-            const data = await res.json();
-
-            if (!res.ok) {
-                message.innerText =
-                    data.detail || "Update failed";
-                return;
-            }
-
-            message.style.color = "green";
-            message.innerText = "Profile updated successfully";
-
-            setTimeout(() => {
-                window.location.href = "./profile.html";
-            }, 800);
-
-        } catch (error) {
-            message.innerText = "Backend not reachable";
+            const cloudData = await cloudRes.json();
+            imageUrl = cloudData.secure_url;
         }
+
+        const payload = {
+            username: username,
+            mobile_number: mobile,
+            location: location
+        };
+
+        if (imageUrl) {
+            payload.profile_image = imageUrl;
+        }
+
+        const res = await fetch(
+            `http://localhost:8000/users/${userId}/profile`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            }
+        );
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            message.innerText = data.detail || "Update failed";
+            return;
+        }
+
+        message.style.color = "green";
+        message.innerText = "Profile updated successfully";
+
+        setTimeout(() => {
+            window.location.href = "./profile.html";
+        }, 800);
+
+    } catch (error) {
+        message.innerText = "Something went wrong";
     }
+}
 </script>
 
 </body>
