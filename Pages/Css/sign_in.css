@@ -83,3 +83,45 @@ body {
 .login-text a:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 480px) {
+
+  body {
+    padding: 20px;
+    min-height: 100vh;
+  }
+
+  .signup-container {
+    width: 100%;
+    max-width: 380px;
+    padding: 35px 25px;
+    border-radius: 12px;
+  }
+
+  .signup-container h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+
+  .input-box {
+    margin-bottom: 18px;
+  }
+
+  .input-box label {
+    font-size: 14px;
+  }
+
+  .input-box input {
+    padding: 14px;
+    font-size: 14px;
+  }
+
+  .btn {
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  .login-text {
+    font-size: 13px;
+  }
+}
