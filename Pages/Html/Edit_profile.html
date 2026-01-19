@@ -9,81 +9,92 @@
 <body>
 
 <div class="profile-container">
-  <h2>Edit Profile</h2>
+    <h2>Edit Profile</h2>
 
-  <!-- IMPORTANT -->
-  <form class="profile-form" onsubmit="updateProfile(event)">
+    <form class="profile-form" onsubmit="updateProfile(event)">
 
-    <div class="form-group">
-      <label>Full Name</label>
-      <input type="text" id="username" placeholder="Enter your name">
-    </div>
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="username" placeholder="Enter your name">
+        </div>
 
-    <div class="form-group">
-      <label>Phone</label>
-      <input type="tel" id="mobile_number" placeholder="Enter your phone number">
-    </div>
+        <div class="form-group">
+            <label>Phone</label>
+            <input type="tel" id="mobile_number" placeholder="Enter your phone number">
+        </div>
 
-    <div class="form-group">
-      <label>Location</label>
-      <input type="text" id="location" placeholder="Enter your location">
-    </div>
+        <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="location" placeholder="Enter your location">
+        </div>
 
-    <button class="save-btn" type="submit">Save Changes</button>
+        <!-- 🔥 IMAGE URL INPUT -->
+        <div class="form-group">
+            <label>Profile Image URL</label>
+            <input
+                type="text"
+                id="profile_image"
+                placeholder="Paste cloud image URL">
+        </div>
 
-    <p id="message" style="text-align:center;color:red;"></p>
-  </form>
+        <button class="save-btn" type="submit">
+            Save Changes
+        </button>
+
+        <p id="message" style="text-align:center;color:red;"></p>
+    </form>
 </div>
 
 <script>
-  async function updateProfile(event) {
-    event.preventDefault(); // stop page reload
+    async function updateProfile(event) {
+        event.preventDefault();
 
-    const userId = localStorage.getItem("user_id");
-    const message = document.getElementById("message");
+        const userId = localStorage.getItem("user_id");
+        const message = document.getElementById("message");
 
-    if (!userId) {
-      message.innerText = "Please login again";
-      return;
-    }
-
-    const payload = {
-      username: document.getElementById("username").value,
-      mobile_number: document.getElementById("mobile_number").value,
-      location: document.getElementById("location").value
-    };
-
-    try {
-      const res = await fetch(
-        `http://localhost:8000/users/${userId}/profile`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
+        if (!userId) {
+            message.innerText = "Please login again";
+            return;
         }
-      );
 
-      const data = await res.json();
+        const payload = {
+            username: document.getElementById("username").value,
+            mobile_number: document.getElementById("mobile_number").value,
+            location: document.getElementById("location").value,
+            profile_image: document.getElementById("profile_image").value
+        };
 
-      if (!res.ok) {
-        message.innerText = data.detail || "Update failed";
-        return;
-      }
+        try {
+            const res = await fetch(
+                `http://localhost:8000/users/${userId}/profile`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                }
+            );
 
-      message.style.color = "green";
-      message.innerText = "Profile updated successfully";
+            const data = await res.json();
 
-      // optional redirect
-      setTimeout(() => {
-        window.location.href = "./profile.html";
-      }, 800);
+            if (!res.ok) {
+                message.innerText =
+                    data.detail || "Update failed";
+                return;
+            }
 
-    } catch (error) {
-      message.innerText = "Backend not reachable";
+            message.style.color = "green";
+            message.innerText = "Profile updated successfully";
+
+            setTimeout(() => {
+                window.location.href = "./profile.html";
+            }, 800);
+
+        } catch (error) {
+            message.innerText = "Backend not reachable";
+        }
     }
-  }
 </script>
 
 </body>

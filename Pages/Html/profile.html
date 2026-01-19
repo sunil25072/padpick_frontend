@@ -8,58 +8,62 @@
 </head>
 <body>
 
-    <!-- Header -->
-    <header class="header">
-        <h1 class="logo">My Profile</h1>
+<header class="header">
+    <h1 class="logo">My Profile</h1>
+    <nav class="navbar">
+        <ul>
+            <li><a href="./home.html">Home</a></li>
+            <li><a href="./Areas.html">Areas</a></li>
+            <li><a href="./profile.html" class="active">Profile</a></li>
+        </ul>
+    </nav>
+</header>
 
-        <nav class="navbar">
-            <ul>
-                <li><a href="./home.html">Home</a></li>
-                <li><a href="./Areas.html">Areas</a></li>
-                <li><a href="./profile.html" class="active">Profile</a></li>
-            </ul>
-        </nav>
-    </header>
+<main class="profile-container">
+    <div class="profile-card">
 
-    <!-- Profile Section -->
-    <main class="profile-container">
-        <div class="profile-card">
-            <img src="../../Asset/Spider-Man & Gwen Aesthetic_.jpg"
-                 alt="Profile Image"
-                 class="profile-img">
+        <!-- 🔥 PROFILE IMAGE -->
+        <img
+            id="profileImg"
+            src="../../Asset/Spider-Man & Gwen Aesthetic_.jpg"
+            alt="Profile Image"
+            class="profile-img"
+        >
 
-            <!-- 🔥 Dynamic data -->
-            <h2 id="username">Loading...</h2>
-            <p class="email" id="email">Loading...</p>
+        <h2 id="username">Loading...</h2>
+        <p class="email" id="email">Loading...</p>
 
-            <div class="profile-info">
-                <p><strong>Phone:</strong> <span id="mobile">Loading...</span></p>
-                <p><strong>Location:</strong> <span id="location">Loading...</span></p>
-            </div>
-
-            <button class="edit-btn">
-              <a class="love" href="./Edit_profile.html">Edit Profile</a>
-            </button>
-            <button class="edit-btn">
-              <a class="love" href="./property.html">Post Property</a>
-            </button>
-            <button class="edit-btn">
-              <a class="love" href="./my_property.html">See your Property</a>
-            </button>
-            <button class="edit-btns" id="deleteBtn">
-                <a class="love">Delete Profile</a>
-            </button>
-
-            <p id="message" style="color:red;text-align:center;"></p>
+        <div class="profile-info">
+            <p><strong>Phone:</strong> <span id="mobile">Loading...</span></p>
+            <p><strong>Location:</strong> <span id="location">Loading...</span></p>
         </div>
-    </main>
 
-    <footer id="copy">
-        <p>&copy;2025 Padpick. All rights Reserved</p>
-    </footer>
+        <button class="edit-btn">
+            <a class="love" href="./Edit_profile.html">Edit Profile</a>
+        </button>
 
-    <!-- 🔥 PROFILE JS -->
-    <script>
+        <button class="edit-btn">
+            <a class="love" href="./property.html">Post Property</a>
+        </button>
+
+        <button class="edit-btn">
+            <a class="love" href="./my_property.html">See your Property</a>
+        </button>
+
+        <button class="edit-btns" id="deleteBtn">
+            <a class="love">Delete Profile</a>
+        </button>
+
+        <p id="message" style="color:red;text-align:center;"></p>
+
+    </div>
+</main>
+
+<footer id="copy">
+    <p>&copy;2025 Padpick. All rights Reserved</p>
+</footer>
+
+<script>
     const userId = localStorage.getItem("user_id");
     const message = document.getElementById("message");
 
@@ -92,9 +96,12 @@
             document.getElementById("email").innerText =
                 data.email;
             document.getElementById("mobile").innerText =
-                data.mobile_number;
+                data.mobile_number || "-";
             document.getElementById("location").innerText =
-                data.location;
+                data.location || "-";
+
+            document.getElementById("profileImg").src =
+                data.profile_image || "../../Asset/Spider-Man & Gwen Aesthetic_.jpg";
 
         } catch (error) {
             message.innerText = "Backend not reachable";
@@ -102,25 +109,16 @@
     }
 
     async function deleteProfile() {
-        if (!userId) {
-            message.innerText = "Please login again";
-            return;
-        }
-
         const confirmDelete = confirm(
             "Are you sure you want to delete your profile?"
         );
 
-        if (!confirmDelete) {
-            return;
-        }
+        if (!confirmDelete) return;
 
         try {
             const res = await fetch(
                 `http://localhost:8000/users/${userId}`,
-                {
-                    method: "DELETE",
-                }
+                { method: "DELETE" }
             );
 
             const data = await res.json();
@@ -132,9 +130,7 @@
             }
 
             alert("Profile deleted successfully");
-
             localStorage.removeItem("user_id");
-
             window.location.href = "../../index.html";
 
         } catch (error) {
