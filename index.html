@@ -1,20 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - PadPick</title>
-    <link rel="stylesheet" href="Pages/Css/login.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - PadPick</title>
+  <link rel="stylesheet" href="Pages/Css/login.css">
 </head>
 <body>
-    <div class="login-container">
-        <h1>Login to PadPick</h1>
-        <form>
-            <input type="email" placeholder="Email" required>
-            <input type="password" placeholder="Password" required>
-            <button type="button" class="btn" onclick="location.href='./Pages/Html/home.html'">Login</button>
-            <p>Don't have an account? <a href="./Pages/Html/sign_in.html">Sign up</a></p>
-        </form>
-    </div>
+
+  <div class="login-container">
+    <h1>Login to PadPick</h1>
+
+    <!-- IMPORTANT: form submit -->
+    <form onsubmit="login(event)">
+      <input
+        type="email"
+        id="email"
+        placeholder="Email"
+        required
+      >
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        required
+      >
+
+      <button type="submit" class="btn">Login</button>
+
+      <p id="message" style="text-align:center;color:red;"></p>
+
+      <p>
+        Don't have an account?
+        <a href="./Pages/Html/sign_in.html">Sign up</a>
+      </p>
+    </form>
+  </div>
+
+  <!-- 🔥 LOGIN JS -->
+  <script>
+    async function login(event) {
+      event.preventDefault(); // page reload stop
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const message = document.getElementById("message");
+      message.innerText = "";
+
+      try {
+        const res = await fetch("http://localhost:8000/users/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+        });
+
+        const data = await res.json();
+
+        // ❌ login failed
+        if (!res.ok) {
+          message.innerText = data.detail || "Invalid email or password";
+          return;
+        }
+
+        // ✅ login success
+        message.style.color = "green";
+        message.innerText = data.message;
+
+        // optional: store user id
+        localStorage.setItem("user_id", data.user_id);
+
+        // redirect to home
+        setTimeout(() => {
+          window.location.href = "./Pages/Html/home.html";
+        }, 800);
+
+      } catch (error) {
+        message.innerText = "Backend not reachable";
+      }
+    }
+  </script>
+
 </body>
 </html>
