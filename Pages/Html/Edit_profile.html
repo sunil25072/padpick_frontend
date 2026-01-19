@@ -28,20 +28,6 @@
             <input type="text" id="location" placeholder="Enter your location">
         </div>
 
-        <!-- 🔥 IMAGE SELECT -->
-        <div class="form-group">
-            <label>Profile Image</label>
-            <input type="file" id="profile_image" accept="image/*">
-        </div>
-
-        <!-- 🔥 IMAGE PREVIEW -->
-        <img
-            id="previewImg"
-            src="../../Asset/Spider-Man & Gwen Aesthetic_.jpg"
-            width="120"
-            style="margin-top:10px;border-radius:50%;"
-        >
-
         <button class="save-btn" type="submit">
             Save Changes
         </button>
@@ -63,41 +49,13 @@ async function updateProfile(event) {
         return;
     }
 
-    const username = document.getElementById("username").value;
-    const mobile = document.getElementById("mobile_number").value;
-    const location = document.getElementById("location").value;
-    const imageFile = document.getElementById("profile_image").files[0];
-
-    let imageUrl = null;
+    const payload = {
+        username: document.getElementById("username").value,
+        mobile_number: document.getElementById("mobile_number").value,
+        location: document.getElementById("location").value
+    };
 
     try {
-        if (imageFile) {
-            const formData = new FormData();
-            formData.append("file", imageFile);
-            formData.append("upload_preset", "profile_upload");
-
-            const cloudRes = await fetch(
-                "https://api.cloudinary.com/v1_1/padpick/image/upload",
-                {
-                    method: "POST",
-                    body: formData
-                }
-            );
-
-            const cloudData = await cloudRes.json();
-            imageUrl = cloudData.secure_url;
-        }
-
-        const payload = {
-            username: username,
-            mobile_number: mobile,
-            location: location
-        };
-
-        if (imageUrl) {
-            payload.profile_image = imageUrl;
-        }
-
         const res = await fetch(
             `http://localhost:8000/users/${userId}/profile`,
             {
@@ -124,7 +82,7 @@ async function updateProfile(event) {
         }, 800);
 
     } catch (error) {
-        message.innerText = "Something went wrong";
+        message.innerText = "Backend not reachable";
     }
 }
 </script>
