@@ -24,23 +24,72 @@
     <!-- Profile Section -->
     <main class="profile-container">
         <div class="profile-card">
-            <img src="../../Asset/Spider-Man & Gwen Aesthetic_.jpg" alt="Profile Image" class="profile-img">
+            <img src="../../Asset/Spider-Man & Gwen Aesthetic_.jpg"
+                 alt="Profile Image"
+                 class="profile-img">
 
-            <h2>Sunil Kumar</h2>
-            <p class="email">sunil@example.com</p>
+            <!-- 🔥 Dynamic data -->
+            <h2 id="username">Loading...</h2>
+            <p class="email" id="email">Loading...</p>
 
             <div class="profile-info">
-                <p><strong>Phone:</strong> +91 98765 43210</p>
-                <p><strong>Location:</strong> India</p>
+                <p><strong>Phone:</strong> <span id="mobile">Loading...</span></p>
+                <p><strong>Location:</strong> <span id="location">Loading...</span></p>
             </div>
 
-            <button class="edit-btn"><a class="love" href="./Edit_profile.html">  Edit Profile</a></button>
-            <button class="edit-btn"><a class="love" href="./property.html">  Post Property</a></button>
-            <button class="edit-btn"><a class="love" href="./my_property.html">  See your Property</a></button>
+            <button class="edit-btn">
+              <a class="love" href="./Edit_profile.html">Edit Profile</a>
+            </button>
+            <button class="edit-btn">
+              <a class="love" href="./property.html">Post Property</a>
+            </button>
+            <button class="edit-btn">
+              <a class="love" href="./my_property.html">See your Property</a>
+            </button>
+
+            <p id="message" style="color:red;text-align:center;"></p>
         </div>
     </main>
- <footer id="copy">
-            <p>&copy;2025 Padpick. All rights Reserved</p>
+
+    <footer id="copy">
+        <p>&copy;2025 Padpick. All rights Reserved</p>
     </footer>
+
+    <!-- 🔥 PROFILE JS -->
+    <script>
+      const userId = localStorage.getItem("user_id");
+      const message = document.getElementById("message");
+
+      if (!userId) {
+        message.innerText = "Please login again";
+      } else {
+        loadProfile();
+      }
+
+      async function loadProfile() {
+        try {
+          const res = await fetch(
+            `http://localhost:8000/users/${userId}/profile`
+          );
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            message.innerText = data.detail || "Failed to load profile";
+            return;
+          }
+
+          // ✅ Fill profile data
+          document.getElementById("username").innerText = data.username;
+          document.getElementById("email").innerText = data.email;
+          document.getElementById("mobile").innerText = data.mobile_number;
+          document.getElementById("location").innerText = data.location;
+
+        } catch (err) {
+          message.innerText = "Backend not reachable";
+        }
+      }
+    </script>
+
 </body>
 </html>
