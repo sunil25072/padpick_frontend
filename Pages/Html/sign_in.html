@@ -42,5 +42,46 @@
       </p>
     </form>
   </div>
+  <script>
+    async function signup(event) {
+      event.preventDefault();
+
+      const payload = {
+        username: document.getElementById("username").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+        mobile_number: document.getElementById("mobile_number").value,
+        location: document.getElementById("location").value
+      };
+
+      const message = document.getElementById("message");
+      message.innerText = "";
+
+      try {
+        const res = await fetch("http://localhost:8000/users/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          message.innerText = data.detail || "Signup failed";
+          return;
+        }
+
+        message.style.color = "green";
+        message.innerText = data.message;
+
+        setTimeout(() => {
+          window.location.href = "../../index.html";
+        }, 800);
+
+      } catch (e) {
+        message.innerText = "Backend not reachable";
+      }
+    }
+  </script>
 </body>
 </html>
