@@ -58,7 +58,7 @@
       message.innerText = "";
 
       try {
-        const res = await fetch("http://localhost:8000/users/signup", {
+        const res = await fetch("http://localhost:8000/docs#/Users/signup_users_signup_post", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
