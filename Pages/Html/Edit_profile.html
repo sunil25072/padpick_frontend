@@ -28,12 +28,6 @@
       <input type="text" id="location">
     </div>
 
-    <!-- ✅ PHOTO OPTION -->
-    <div class="form-group">
-      <label>Profile Photo</label>
-      <input type="file" id="profile_image" accept="image/*">
-    </div>
-
     <button class="save-btn" type="submit">Save Changes</button>
 
     <p id="message"></p>
@@ -55,36 +49,11 @@ async function updateProfile(event) {
   const username = document.getElementById("username").value.trim();
   const location = document.getElementById("location").value.trim();
   const mobileVal = document.getElementById("mobile_number").value.trim();
-  const imageInput = document.getElementById("profile_image");
 
-  let imageUrl = null;
-
-  // 🔹 Upload image (if selected)
-  if (imageInput && imageInput.files.length > 0) {
-    const imageFile = imageInput.files[0];
-    const formData = new FormData();
-    formData.append("file", imageFile);
-    formData.append("upload_preset", "profile_upload");
-
-    const cloudRes = await fetch(
-      "https://api.cloudinary.com/v1_1/padpick/image/upload",
-      {
-        method: "POST",
-        body: formData
-      }
-    );
-
-    const cloudData = await cloudRes.json();
-    imageUrl = cloudData.secure_url;
-  }
-
-  // 🔹 Build payload safely
   const payload = {};
-
   if (username !== "") payload.username = username;
   if (location !== "") payload.location = location;
   if (mobileVal !== "") payload.mobile_number = Number(mobileVal);
-  if (imageUrl) payload.profile_image = imageUrl;
 
   try {
     const res = await fetch(
