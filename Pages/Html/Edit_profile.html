@@ -52,11 +52,16 @@ async function updateProfile(event) {
     return;
   }
 
-  let imageUrl = null;
-  const imageFile = document.getElementById("profile_image").files[0];
+  const username = document.getElementById("username").value.trim();
+  const location = document.getElementById("location").value.trim();
+  const mobileVal = document.getElementById("mobile_number").value.trim();
+  const imageInput = document.getElementById("profile_image");
 
-  // 🔹 Upload image to Cloudinary
-  if (imageFile) {
+  let imageUrl = null;
+
+  // 🔹 Upload image (if selected)
+  if (imageInput && imageInput.files.length > 0) {
+    const imageFile = imageInput.files[0];
     const formData = new FormData();
     formData.append("file", imageFile);
     formData.append("upload_preset", "profile_upload");
@@ -73,39 +78,41 @@ async function updateProfile(event) {
     imageUrl = cloudData.secure_url;
   }
 
-  const payload = {
-    username: document.getElementById("username").value,
-    mobile_number: document.getElementById("mobile_number").value,
-    location: document.getElementById("location").value
-  };
+  // 🔹 Build payload safely
+  const payload = {};
 
-  if (imageUrl) {
-    payload.profile_image = imageUrl;
-  }
+  if (username !== "") payload.username = username;
+  if (location !== "") payload.location = location;
+  if (mobileVal !== "") payload.mobile_number = Number(mobileVal);
+  if (imageUrl) payload.profile_image = imageUrl;
 
   try {
     const res = await fetch(
       `http://localhost:8000/users/${userId}/profile`,
       {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify(payload)
       }
     );
 
+    const data = await res.json();
+
     if (!res.ok) {
-      message.innerText = "Update failed";
+      message.innerText = data.detail || "Update failed";
       return;
     }
 
     message.style.color = "green";
-    message.innerText = "Profile updated";
+    message.innerText = "Profile updated successfully";
 
     setTimeout(() => {
       window.location.href = "./profile.html";
     }, 800);
 
-  } catch (err) {
+  } catch (error) {
     message.innerText = "Backend not reachable";
   }
 }
