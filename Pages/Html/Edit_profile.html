@@ -9,81 +9,105 @@
 <body>
 
 <div class="profile-container">
-    <h2>Edit Profile</h2>
+  <h2>Edit Profile</h2>
 
-    <form class="profile-form" onsubmit="updateProfile(event)">
+  <form class="profile-form" onsubmit="updateProfile(event)">
 
-        <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" id="username" placeholder="Enter your name">
-        </div>
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="username">
+    </div>
 
-        <div class="form-group">
-            <label>Phone</label>
-            <input type="tel" id="mobile_number" placeholder="Enter your phone number">
-        </div>
+    <div class="form-group">
+      <label>Phone</label>
+      <input type="tel" id="mobile_number">
+    </div>
 
-        <div class="form-group">
-            <label>Location</label>
-            <input type="text" id="location" placeholder="Enter your location">
-        </div>
+    <div class="form-group">
+      <label>Location</label>
+      <input type="text" id="location">
+    </div>
 
-        <button class="save-btn" type="submit">
-            Save Changes
-        </button>
+    <!-- ✅ PHOTO OPTION -->
+    <div class="form-group">
+      <label>Profile Photo</label>
+      <input type="file" id="profile_image" accept="image/*">
+    </div>
 
-        <p id="message" style="text-align:center;color:red;"></p>
+    <button class="save-btn" type="submit">Save Changes</button>
 
-    </form>
+    <p id="message"></p>
+  </form>
 </div>
 
 <script>
 async function updateProfile(event) {
-    event.preventDefault();
+  event.preventDefault();
 
-    const userId = localStorage.getItem("user_id");
-    const message = document.getElementById("message");
+  const userId = localStorage.getItem("user_id");
+  const message = document.getElementById("message");
 
-    if (!userId) {
-        message.innerText = "Please login again";
-        return;
+  if (!userId) {
+    message.innerText = "Please login again";
+    return;
+  }
+
+  let imageUrl = null;
+  const imageFile = document.getElementById("profile_image").files[0];
+
+  // 🔹 Upload image to Cloudinary
+  if (imageFile) {
+    const formData = new FormData();
+    formData.append("file", imageFile);
+    formData.append("upload_preset", "profile_upload");
+
+    const cloudRes = await fetch(
+      "https://api.cloudinary.com/v1_1/padpick/image/upload",
+      {
+        method: "POST",
+        body: formData
+      }
+    );
+
+    const cloudData = await cloudRes.json();
+    imageUrl = cloudData.secure_url;
+  }
+
+  const payload = {
+    username: document.getElementById("username").value,
+    mobile_number: document.getElementById("mobile_number").value,
+    location: document.getElementById("location").value
+  };
+
+  if (imageUrl) {
+    payload.profile_image = imageUrl;
+  }
+
+  try {
+    const res = await fetch(
+      `http://localhost:8000/users/${userId}/profile`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    if (!res.ok) {
+      message.innerText = "Update failed";
+      return;
     }
 
-    const payload = {
-        username: document.getElementById("username").value,
-        mobile_number: document.getElementById("mobile_number").value,
-        location: document.getElementById("location").value
-    };
+    message.style.color = "green";
+    message.innerText = "Profile updated";
 
-    try {
-        const res = await fetch(
-            `http://localhost:8000/users/${userId}/profile`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
-            }
-        );
+    setTimeout(() => {
+      window.location.href = "./profile.html";
+    }, 800);
 
-        const data = await res.json();
-
-        if (!res.ok) {
-            message.innerText = data.detail || "Update failed";
-            return;
-        }
-
-        message.style.color = "green";
-        message.innerText = "Profile updated successfully";
-
-        setTimeout(() => {
-            window.location.href = "./profile.html";
-        }, 800);
-
-    } catch (error) {
-        message.innerText = "Backend not reachable";
-    }
+  } catch (err) {
+    message.innerText = "Backend not reachable";
+  }
 }
 </script>
 
