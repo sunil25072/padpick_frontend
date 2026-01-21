@@ -11,35 +11,45 @@
 <div class="profile-container">
   <h2>Edit Profile</h2>
 
+  <!-- 🔥 IMPORTANT: onsubmit -->
   <form class="profile-form" onsubmit="updateProfile(event)">
 
     <div class="form-group">
       <label>Full Name</label>
-      <input type="text" id="username">
+      <input type="text" id="username" placeholder="Enter name">
     </div>
 
     <div class="form-group">
       <label>Phone</label>
-      <input type="tel" id="mobile_number">
+      <input type="tel" id="mobile_number" placeholder="Enter phone">
     </div>
 
     <div class="form-group">
       <label>Location</label>
-      <input type="text" id="location">
+      <input type="text" id="location" placeholder="Enter location">
+    </div>
+
+    <div class="form-group">
+      <label>Profile Photo</label>
+      <input type="file" id="profile_image" accept="image/*">
     </div>
 
     <button class="save-btn" type="submit">Save Changes</button>
 
-    <p id="message"></p>
+    <p id="message" style="text-align:center;color:red;"></p>
   </form>
 </div>
 
 <script>
 async function updateProfile(event) {
   event.preventDefault();
+  console.log("Submit clicked"); // ✅ DEBUG
+
+  const message = document.getElementById("message");
+  message.innerText = "";
 
   const userId = localStorage.getItem("user_id");
-  const message = document.getElementById("message");
+  console.log("User ID:", userId);
 
   if (!userId) {
     message.innerText = "Please login again";
@@ -49,25 +59,70 @@ async function updateProfile(event) {
   const username = document.getElementById("username").value.trim();
   const location = document.getElementById("location").value.trim();
   const mobileVal = document.getElementById("mobile_number").value.trim();
+  const imageInput = document.getElementById("profile_image");
 
+  let imageUrl = null;
+
+  /* ===============================
+     1️⃣ UPLOAD IMAGE TO BACKEND
+     =============================== */
+  if (imageInput.files.length > 0) {
+    const formData = new FormData();
+    formData.append("file", imageInput.files[0]);
+
+    try {
+      console.log("Uploading image...");
+      const imgRes = await fetch(
+        "http://localhost:8000/users/upload-profile-image",
+        {
+          method: "POST",
+          body: formData
+        }
+      );
+
+      const imgData = await imgRes.json();
+      console.log("Image upload response:", imgData);
+
+      if (!imgRes.ok) {
+        message.innerText = imgData.detail || "Image upload failed";
+        return;
+      }
+
+      imageUrl = imgData.image_url; // ✅ secure_url from backend
+
+    } catch (err) {
+      console.error(err);
+      message.innerText = "Image upload failed";
+      return;
+    }
+  }
+
+  /* ===============================
+     2️⃣ BUILD PAYLOAD
+     =============================== */
   const payload = {};
-  if (username !== "") payload.username = username;
-  if (location !== "") payload.location = location;
-  if (mobileVal !== "") payload.mobile_number = Number(mobileVal);
+  if (username) payload.username = username;
+  if (location) payload.location = location;
+  if (mobileVal) payload.mobile_number = Number(mobileVal);
+  if (imageUrl) payload.profile_image = imageUrl;
 
+  console.log("Update payload:", payload);
+
+  /* ===============================
+     3️⃣ UPDATE USER PROFILE
+     =============================== */
   try {
     const res = await fetch(
       `http://localhost:8000/users/${userId}/profile`,
       {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       }
     );
 
     const data = await res.json();
+    console.log("Update response:", data);
 
     if (!res.ok) {
       message.innerText = data.detail || "Update failed";
@@ -82,6 +137,7 @@ async function updateProfile(event) {
     }, 800);
 
   } catch (error) {
+    console.error(error);
     message.innerText = "Backend not reachable";
   }
 }
