@@ -5,15 +5,14 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* ---------- BODY ---------- */
 body {
   background-color: #f4f6f8;
   min-height: 100vh;
 }
 
 /* ---------- HEADER ---------- */
-
 .header {
-  width: 100%;
   background-color: black;
   color: white;
   padding: 20px 30px;
@@ -34,27 +33,27 @@ body {
   gap: 20px;
 }
 
-.navbar ul li a {
+.navbar a {
   text-decoration: none;
   color: white;
   font-size: 15px;
 }
 
-/* ---------- FORM ---------- */
-
+/* ---------- FORM CONTAINER ---------- */
 .form-container {
   display: flex;
   justify-content: center;
   padding: 40px 15px;
 }
 
+/* ---------- FORM CARD ---------- */
 .form-card {
-  background-color: white;
+  background: white;
   width: 100%;
-  max-width: 420px;
+  max-width: 450px;
   padding: 25px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
 }
 
 .form-card h2 {
@@ -62,38 +61,38 @@ body {
   margin-bottom: 20px;
 }
 
-.form-group {
+/* ---------- FORM ELEMENTS ---------- */
+form input,
+form select,
+form textarea {
+  width: 100%;
+  padding: 10px;
   margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   font-size: 14px;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-textarea {
+form textarea {
   resize: none;
   height: 80px;
 }
 
-.form-row {
-  display: flex;
-  gap: 10px;
+form label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* ---------- FILE INPUT ---------- */
+input[type="file"] {
+  padding: 6px;
+  background: #f9f9f9;
 }
 
 /* ---------- BUTTON ---------- */
-
-.submit-btn {
+form button {
   width: 100%;
   padding: 12px;
   background-color: #007bff;
@@ -104,27 +103,26 @@ textarea {
   cursor: pointer;
 }
 
-.submit-btn:hover {
+form button:hover {
   background-color: #0056b3;
 }
 
 /* ---------- FOOTER ---------- */
-
 .footer {
-  padding: 20px;
-  text-align: center;
-  background-color: black;
+  background: black;
   color: white;
+  text-align: center;
+  padding: 20px;
   margin-top: 40px;
 }
 
 /* ---------- MOBILE ---------- */
-
 @media (max-width: 480px) {
 
   .header {
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
+    text-align: center;
   }
 
   .navbar ul {
@@ -132,7 +130,7 @@ textarea {
     gap: 10px;
   }
 
-  .form-row {
-    flex-direction: column;
+  .form-card {
+    padding: 20px;
   }
 }

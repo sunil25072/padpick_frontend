@@ -26,74 +26,41 @@
         <div class="form-card">
             <h2>Post Your Property</h2>
 
-            <form>
-                <div class="form-group">
-                    <label>Property Title</label>
-                    <input type="text" placeholder="Surya's Home">
-                </div>
+<form
+  action="http://127.0.0.1:8000/homes/add"
+  method="post"
+  enctype="multipart/form-data"
+>
 
-                <div class="form-group">
-                    <label>Property Type</label>
-                    <select>
-                        <option>Select Type</option>
-                        <option>PG / Hostel</option>
-                        <option>Villa</option>
-                    </select>
-                </div>
+  <input type="text" name="name" placeholder="Surya's Home" required>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Rent / Price</label>
-                        <input type="number" placeholder="₹ Amount">
-                    </div>
+  <input type="number" name="price" placeholder="₹ Amount" required>
 
-                    <div class="form-group">
-                        <label>Bedrooms</label>
-                        <select>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                        </select>
-                    </div>
-                </div>
+  <select name="area_id" required>
+    <option value="">Select Area</option>
+    <option value="1">Anna Nagar</option>
+    <option value="2">Perungudi</option>
+    <option value="3">T - Nagar</option>
+    <option value="4">Velachery</option>
+  </select>
 
-                <div class="form-group">
-                    <label>Area</label>
-                    <select>
-                        <option value>Select Area</option>
-                        <option value="1">Anna Nagar</option>
-                        <option value="2">Perungudi</option>
-                        <option value="3">T - Nagar</option>
-                        <option value="4">Velachery</option>
-                    </select>
-                </div>
+  <textarea name="address" placeholder="No:9, Velachery"></textarea>
 
-                <div class="form-group">
-                    <label>Address</label>
-                    <textarea placeholder="No:9, Velachery"></textarea>
-                </div>
+  <!-- 🔥 MAIN IMAGE SOURCE -->
+  <label>Upload House Images</label>
+  <input type="file" name="house_images" multiple required>
 
-                <div class="form-group">
-                    <label>Upload House Images</label>
-                    <input type="file" multiple>
-                </div>
+  <label>Upload Kitchen Images</label>
+  <input type="file" name="kitchen_images" multiple>
 
-                <div class="form-group">
-                    <label>Upload Kitchen Images</label>
-                    <input type="file" >
-                </div>
-                <div class="form-group">
-                    <label>Upload Bathroom Images</label>
-                    <input type="file" multiple>
-                </div>
-                <div class="form-group">
-                    <label>Upload Hall Images</label>
-                    <input type="file" multiple>
-                </div>
+  <label>Upload Bathroom Images</label>
+  <input type="file" name="bathroom_images" multiple>
 
-                <button type="submit" class="submit-btn"><a class="love" href="./profile.html"> Post Property</a></button>
-            </form>
+  <label>Upload Hall Images</label>
+  <input type="file" name="hall_images" multiple>
+
+  <button type="submit">Post Property</button>
+</form>
         </div>
     </main>
 
