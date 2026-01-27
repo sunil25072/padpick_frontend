@@ -7,12 +7,11 @@
 <link rel="stylesheet" href="../Css/Edit_profile.css">
 </head>
 <body>
+
 <div class="profile-container">
   <h2>Edit Profile</h2>
 
-  <!-- 🔥 IMPORTANT: onsubmit -->
   <form class="profile-form" onsubmit="updateProfile(event)">
-
     <div class="form-group">
       <label>Full Name</label>
       <input type="text" id="username" placeholder="Enter name">
@@ -34,7 +33,6 @@
     </div>
 
     <button class="save-btn" type="submit">Save Changes</button>
-
     <p id="message" style="text-align:center;color:red;"></p>
   </form>
 </div>
@@ -42,14 +40,11 @@
 <script>
 async function updateProfile(event) {
   event.preventDefault();
-  console.log("Submit clicked"); // ✅ DEBUG
 
   const message = document.getElementById("message");
   message.innerText = "";
 
   const userId = localStorage.getItem("user_id");
-  console.log("User ID:", userId);
-
   if (!userId) {
     message.innerText = "Please login again";
     return;
@@ -60,57 +55,43 @@ async function updateProfile(event) {
   const mobileVal = document.getElementById("mobile_number").value.trim();
   const imageInput = document.getElementById("profile_image");
 
-  let imageUrl = null;
-
   /* ===============================
-     1️⃣ UPLOAD IMAGE TO BACKEND
+     1️⃣ UPLOAD IMAGE (CLOUDINARY)
      =============================== */
   if (imageInput.files.length > 0) {
     const formData = new FormData();
     formData.append("file", imageInput.files[0]);
 
-    try {
-      console.log("Uploading image...");
-      const imgRes = await fetch(
-        "http://localhost:8000/users/upload-profile-image",
-        {
-          method: "POST",
-          body: formData
-        }
-      );
-
-      const imgData = await imgRes.json();
-      console.log("Image upload response:", imgData);
-
-      if (!imgRes.ok) {
-        message.innerText = imgData.detail || "Image upload failed";
-        return;
+    const imgRes = await fetch(
+      `http://localhost:8000/users/${userId}/upload-profile-image`,
+      {
+        method: "POST",
+        body: formData
       }
+    );
 
-      imageUrl = imgData.image_url; // ✅ secure_url from backend
+    const imgData = await imgRes.json();
 
-    } catch (err) {
-      console.error(err);
-      message.innerText = "Image upload failed";
+    if (!imgRes.ok) {
+      message.innerText = imgData.detail || "Image upload failed";
       return;
     }
   }
 
   /* ===============================
-     2️⃣ BUILD PAYLOAD
+     2️⃣ UPDATE TEXT DETAILS
      =============================== */
   const payload = {};
   if (username) payload.username = username;
   if (location) payload.location = location;
   if (mobileVal) payload.mobile_number = Number(mobileVal);
-  if (imageUrl) payload.profile_image = imageUrl;
 
-  console.log("Update payload:", payload);
+  if (Object.keys(payload).length === 0 && imageInput.files.length === 0) {
+    message.innerText = "No changes to update";
+    return;
+  }
 
-  /* ===============================
-     3️⃣ UPDATE USER PROFILE
-     =============================== */
-  try {
+  if (Object.keys(payload).length > 0) {
     const res = await fetch(
       `http://localhost:8000/users/${userId}/profile`,
       {
@@ -121,24 +102,18 @@ async function updateProfile(event) {
     );
 
     const data = await res.json();
-    console.log("Update response:", data);
-
     if (!res.ok) {
       message.innerText = data.detail || "Update failed";
       return;
     }
-
-    message.style.color = "green";
-    message.innerText = "Profile updated successfully";
-
-    setTimeout(() => {
-      window.location.href = "./profile.html";
-    }, 800);
-
-  } catch (error) {
-    console.error(error);
-    message.innerText = "Backend not reachable";
   }
+
+  message.style.color = "green";
+  message.innerText = "Profile updated successfully";
+
+  setTimeout(() => {
+    window.location.href = "./profile.html";
+  }, 800);
 }
 </script>
 
