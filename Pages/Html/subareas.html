@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velachery - PG & Homes</title>
+    <link rel="stylesheet" href="../Css/subareas.css">
+</head>
+<body>
+
+<!-- HEADER -->
+</head>
+<body>
+
+<header>
+    <h1>Padpick</h1>
+    <nav class="navbar">
+        <ul>
+            <li><a href="./home.html">Home</a></li>
+            <li><a href="./Areas.html">Areas</a></li>
+            <li><a href="./profile.html">Profile</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <div id="areaTitle" class="title">Loading...</div>
+
+    <div id="pgList" class="pg-list"></div>
+
+    <div id="msg" class="message"></div>
+</div>
+
+<footer>
+    &copy; 2025 Padpick. All rights reserved.
+</footer>
+
+<script>
+/* 1️⃣ URL-la irundhu area_id eduthuko */
+const params = new URLSearchParams(window.location.search);
+const areaId = params.get("area_id");
+
+if (!areaId) {
+    document.getElementById("msg").innerText = "Invalid Area";
+}
+
+/* 2️⃣ Backend call */
+fetch(`http://127.0.0.1:8000/homes/by-area/${areaId}`)
+    .then(res => res.json())
+    .then(data => {
+        const list = document.getElementById("pgList");
+        const msg = document.getElementById("msg");
+        const title = document.getElementById("areaTitle");
+
+        if (!data || data.length === 0) {
+            title.innerText = "No Homes Found";
+            msg.innerText = "This area has no PGs or Homes";
+            return;
+        }
+
+        /* 3️⃣ Area name title */
+        title.innerText = data[0].area;
+
+        /* 4️⃣ Cards create pannu */
+        data.forEach(home => {
+            list.innerHTML += `
+                <div class="pg-card">
+                    <img src="../../Asset/velachery 1.jpg">
+                    <div class="content">
+                        <h3>${home.name}</h3>
+                        <p>₹ ${home.price} / month</p>
+                        <a href="#" class="btn">View Details</a>
+                    </div>
+                </div>
+            `;
+        });
+    })
+    .catch(() => {
+        document.getElementById("msg").innerText =
+            "Backend not reachable";
+    });
+</script>
+
+</body>
+</html>
