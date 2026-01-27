@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home Details</title>
+  <link rel="stylesheet" href="../Css/Pg&Areas.css">
+
+  <!-- UN EXISTING CSS -->
+  <link rel="stylesheet" href="../../Css/pg,home.css">
+</head>
+
+<body>
+
+<header>
+  <h1 id="homeTitle">Loading...</h1>
+  <nav class="navbar">
+    <ul>
+      <li><a href="../home.html">Home</a></li>
+      <li><a href="../Areas.html">Areas</a></li>
+      <li><a href="../profile.html">Profile</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- ================= MAIN CARD ================= -->
+<div class="container">
+  <div class="pg-card">
+
+    <!-- MAIN IMAGE -->
+    <img id="mainImg" src="" alt="PG Room" />
+
+    <!-- THUMBNAILS + DETAILS -->
+    <div class="thumbnails">
+
+      <!-- THUMBNAILS -->
+      <a href="#img1"><img id="thumb1" src=""></a>
+      <a href="#img2"><img id="thumb2" src=""></a>
+      <a href="#img3"><img id="thumb3" src=""></a>
+
+      <!-- DETAILS (UNCHANGED STRUCTURE) -->
+      <p><strong>Rent:</strong> ₹<span id="price"></span>/month</p>
+      <p><strong>Facilities:</strong> <span id="facilities"></span></p>
+      <p><strong>Address:</strong> <span id="address"></span></p>
+      <p><strong>Contact no:</strong> <span id="contact"></span></p>
+
+      <a href="javascript:history.back()" class="back-btn">Go Back</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= LIGHTBOX (UNCHANGED) ================= -->
+<div class="lightbox" id="img1">
+  <a href="#">&times;</a>
+  <img id="lb1" src="" />
+</div>
+
+<div class="lightbox" id="img2">
+  <a href="#">&times;</a>
+  <img id="lb2" src="" />
+</div>
+
+<div class="lightbox" id="img3">
+  <a href="#">&times;</a>
+  <img id="lb3" src="" />
+</div>
+
+<footer id="copy">
+  <p>&copy;2025 Padpick All rights Reserved</p>
+</footer>
+
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+/*
+  EXPECTED BACKEND RESPONSE:
+
+  {
+    "id": 5,
+    "name": "Green View PG",
+    "price": 8000,
+    "description": "WiFi, 24x7 Water, Food, AC Rooms",
+    "address": "No.12, Velachery Main Road",
+    "contact_number": "9876543210",
+    "images": [
+      "home5_1.jpg",
+      "home5_2.jpg",
+      "home5_3.jpg"
+    ]
+  }
+*/
+
+const params = new URLSearchParams(window.location.search);
+const homeId = params.get("home_id");
+
+if (!homeId) {
+  alert("Invalid Home");
+}
+
+// BACKEND IMAGE BASE URL
+const IMG_BASE = "http://127.0.0.1:8000/uploads/";
+
+fetch(`http://127.0.0.1:8000/homes/${homeId}`)
+  .then(res => res.json())
+  .then(data => {
+    console.log("HOME DATA:", data);
+
+    // TITLE
+    document.getElementById("homeTitle").innerText = data.name;
+
+    // TEXT DETAILS
+    document.getElementById("price").innerText = data.price;
+    document.getElementById("facilities").innerText = data.description;
+    document.getElementById("address").innerText = data.address;
+    document.getElementById("contact").innerText = data.contact_number;
+
+    // IMAGES (USER UPLOADED)
+    if (data.images && data.images.length >= 3) {
+
+      // MAIN IMAGE
+      document.getElementById("mainImg").src = IMG_BASE + data.images[0];
+
+      // THUMBNAILS
+      document.getElementById("thumb1").src = IMG_BASE + data.images[0];
+      document.getElementById("thumb2").src = IMG_BASE + data.images[1];
+      document.getElementById("thumb3").src = IMG_BASE + data.images[2];
+
+      // LIGHTBOX
+      document.getElementById("lb1").src = IMG_BASE + data.images[0];
+      document.getElementById("lb2").src = IMG_BASE + data.images[1];
+      document.getElementById("lb3").src = IMG_BASE + data.images[2];
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Backend not reachable");
+  });
+</script>
+
+</body>
+</html>

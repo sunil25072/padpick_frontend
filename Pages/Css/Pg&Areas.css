@@ -1,0 +1,178 @@
+/* ================= RESET ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* ================= BODY ================= */
+body {
+  background: #f4f6f8;
+  color: #333;
+}
+
+/* ================= HEADER ================= */
+header {
+  background: #000000;
+  color: #fff;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 24px;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* ================= MAIN CONTAINER ================= */
+.container {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 15px;
+}
+
+/* ================= CARD ================= */
+.pg-card {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* ================= MAIN IMAGE ================= */
+.pg-card > img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+}
+
+/* ================= DETAILS + THUMBNAILS ================= */
+.thumbnails {
+  padding: 20px;
+}
+
+/* Thumbnail images */
+.thumbnails a img {
+  width: 90px;
+  height: 70px;
+  object-fit: cover;
+  margin-right: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.3s;
+}
+
+.thumbnails a img:hover {
+  border-color: #3498db;
+}
+
+/* Text details */
+.thumbnails p {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.thumbnails strong {
+  color: #000;
+}
+
+/* ================= BUTTON ================= */
+.back-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 18px;
+  background: #3498db;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.back-btn:hover {
+  background: #2980b9;
+}
+
+/* ================= LIGHTBOX ================= */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Show when clicked */
+.lightbox:target {
+  display: flex;
+}
+
+/* Lightbox image */
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(255,255,255,0.3);
+}
+
+/* Close button */
+.lightbox a {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 40px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* ================= FOOTER ================= */
+#copy {
+  margin-top: 40px;
+  background: #000000;
+  text-align: center;
+  padding: 15px;
+  color: #ffffff;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+
+  header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pg-card > img {
+    height: 250px;
+  }
+
+  .thumbnails a img {
+    width: 70px;
+    height: 55px;
+  }
+
+  header h1 {
+    font-size: 20px;
+  }
+}

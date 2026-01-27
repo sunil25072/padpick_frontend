@@ -69,7 +69,7 @@ fetch(`http://127.0.0.1:8000/homes/by-area/${areaId}`)
                     <div class="content">
                         <h3>${home.name}</h3>
                         <p>₹ ${home.price} / month</p>
-                        <a href="#" class="btn">View Details</a>
+                        <a href="./home_details.html?home_id=${home.id}" class="btn">View Details</a>
                     </div>
                 </div>
             `;
