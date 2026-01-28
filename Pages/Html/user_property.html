@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Properties</title>
+    <link rel="stylesheet" href="../Css/subareas.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <h1>Padpick</h1>
+    <nav class="navbar">
+        <ul>
+            <li><a href="./home.html">Home</a></li>
+            <li><a href="./Areas.html">Areas</a></li>
+            <li><a href="./profile.html">Profile</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <div id="areaTitle" class="title">My Properties</div>
+
+    <div id="pgList" class="pg-list"></div>
+
+    <div id="msg" class="message"></div>
+</div>
+
+<footer>
+    &copy; 2025 Padpick. All rights reserved.
+</footer>
+
+<!-- ================= JS ================= -->
+<script>
+const userId = localStorage.getItem("user_id");
+const list = document.getElementById("pgList");
+const msg = document.getElementById("msg");
+
+if (!userId) {
+    msg.innerText = "Please login again";
+} else {
+    loadMyProperties();
+}
+
+function loadMyProperties() {
+    fetch(`http://127.0.0.1:8000/homes/by-user/${userId}`)
+        .then(res => res.json())
+        .then(data => {
+            console.log("MY PROPERTIES 👉", data);
+
+            if (!Array.isArray(data) || data.length === 0) {
+                msg.innerText = "You have not posted any property yet";
+                return;
+            }
+
+            list.innerHTML = "";
+            msg.innerText = "";
+
+            data.forEach(home => {
+                list.innerHTML += `
+                    <div class="pg-card">
+                        <img src="${home.img1}" alt="${home.name}">
+                        <div class="content">
+                            <h3>${home.name}</h3>
+                            <p>₹ ${home.price} / month</p>
+                            <a href="./Pg&Areas.html?home_id=${home.id}" class="btn">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            msg.innerText = "Backend not reachable";
+        });
+}
+</script>
+
+</body>
+</html>

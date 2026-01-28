@@ -81,6 +81,7 @@ form.addEventListener("submit", async (e) => {
   formData.append("price", form.price.value);
   formData.append("area_id", form.area_id.value);
   formData.append("address", form.address.value);
+  formData.append("user_id", localStorage.getItem("user_id"));
 
   // 🔥 MERGE ALL 4 IMAGE INPUTS INTO house_images
   const imageInputs = [
