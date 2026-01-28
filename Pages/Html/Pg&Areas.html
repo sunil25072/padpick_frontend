@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Home Details</title>
-  <link rel="stylesheet" href="../Css/Pg&Areas.css"
 
-  <!-- UN EXISTING CSS -->
-  <link rel="stylesheet" href="../../Css/pg,home.css">
+  <link rel="stylesheet" href="../Css/Pg&Areas.css">
 </head>
 
 <body>
 
+<!-- ================= HEADER ================= -->
 <header>
   <h1 id="homeTitle">Loading...</h1>
   <nav class="navbar">
     <ul>
-      <li><a href="../home.html">Home</a></li>
-      <li><a href="../Areas.html">Areas</a></li>
-      <li><a href="../profile.html">Profile</a></li>
+      <li><a href="./home.html">Home</a></li>
+      <li><a href="./Areas.html">Areas</a></li>
+      <li><a href="./profile.html">Profile</a></li>
     </ul>
   </nav>
 </header>
@@ -28,17 +27,15 @@
   <div class="pg-card">
 
     <!-- MAIN IMAGE -->
-    <img id="mainImg" src="" alt="PG Room" />
+    <img id="mainImg" src="" alt="PG Room">
 
     <!-- THUMBNAILS + DETAILS -->
     <div class="thumbnails">
 
-      <!-- THUMBNAILS -->
-      <a href="#img1"><img id="thumb1" src=""></a>
-      <a href="#img2"><img id="thumb2" src=""></a>
-      <a href="#img3"><img id="thumb3" src=""></a>
+      <a href="#img1"><img id="thumb1"></a>
+      <a href="#img2"><img id="thumb2"></a>
+      <a href="#img3"><img id="thumb3"></a>
 
-      <!-- DETAILS (UNCHANGED STRUCTURE) -->
       <p><strong>Rent:</strong> ₹<span id="price"></span>/month</p>
       <p><strong>Facilities:</strong> <span id="facilities"></span></p>
       <p><strong>Address:</strong> <span id="address"></span></p>
@@ -49,101 +46,68 @@
   </div>
 </div>
 
-<!-- ================= LIGHTBOX (UNCHANGED) ================= -->
+<!-- ================= LIGHTBOX ================= -->
 <div class="lightbox" id="img1">
   <a href="#">&times;</a>
-  <img id="lb1" src="" />
+  <img id="lb1">
 </div>
 
 <div class="lightbox" id="img2">
   <a href="#">&times;</a>
-  <img id="lb2" src="" />
+  <img id="lb2">
 </div>
 
 <div class="lightbox" id="img3">
   <a href="#">&times;</a>
-  <img id="lb3" src="" />
+  <img id="lb3">
 </div>
 
 <footer id="copy">
   <p>&copy;2025 Padpick All rights Reserved</p>
 </footer>
 
-<!-- ================= JAVASCRIPT ================= -->
+<!-- ================= JS ================= -->
 <script>
-/*
-EXPECTED BACKEND RESPONSE (Cloudinary URLs):
-
-{
-  "id": 5,
-  "name": "Green View PG",
-  "price": 8000,
-  "description": "WiFi, 24x7 Water, Food, AC Rooms",
-  "address": "No.12, Velachery Main Road",
-  "contact_number": "9876543210",
-  "images": [
-    "https://res.cloudinary.com/xxx/img1.jpg",
-    "https://res.cloudinary.com/xxx/img2.jpg",
-    "https://res.cloudinary.com/xxx/img3.jpg",
-    "https://res.cloudinary.com/xxx/img4.jpg"
-  ]
-}
-*/
-
 const params = new URLSearchParams(window.location.search);
 const homeId = params.get("home_id");
 
 if (!homeId) {
   alert("Invalid Home");
+  window.location.href = "../home.html";
 }
 
-/* 🔥 FETCH HOME DETAILS */
 fetch(`http://127.0.0.1:8000/homes/${homeId}`)
-  .then(res => res.json())
+  .then(res => {
+    if (!res.ok) throw new Error("Home not found");
+    return res.json();
+  })
   .then(data => {
     console.log("HOME DATA 👉", data);
 
-    /* ================= TEXT ================= */
     document.getElementById("homeTitle").innerText = data.name;
     document.getElementById("price").innerText = data.price;
-    document.getElementById("facilities").innerText = data.description;
+    document.getElementById("facilities").innerText = data.description || "—";
     document.getElementById("address").innerText = data.address;
     document.getElementById("contact").innerText = data.contact_number;
 
-    if (!data.images || data.images.length === 0) return;
+    if (!data.images || !data.images[0]) return;
 
-    /* ================= IMAGES ================= */
+    document.getElementById("mainImg").src = data.images[0];
 
-    // 🔥 MAIN IMAGE = FIRST IMAGE
-    document.getElementById("mainImg").src =
-      data.images[0] + "?v=" + Date.now();
-
-    // IDs already in your HTML (DESIGN UNCHANGED)
     const thumbIds = ["thumb1", "thumb2", "thumb3"];
     const lightboxIds = ["lb1", "lb2", "lb3"];
 
-    // Remaining images (after main image)
-    const restImages = data.images.slice(1);
-
-    for (let i = 0; i < thumbIds.length; i++) {
-      if (restImages[i]) {
-        document.getElementById(thumbIds[i]).src = restImages[i];
-        document.getElementById(lightboxIds[i]).src = restImages[i];
+    for (let i = 0; i < 3; i++) {
+      if (data.images[i + 1]) {
+        document.getElementById(thumbIds[i]).src = data.images[i + 1];
+        document.getElementById(lightboxIds[i]).src = data.images[i + 1];
       }
     }
-
-    /* ================= 4th IMAGE HANDLING ================= */
-    if (data.images.length === 4) {
-      // 4th image is shown in 3rd thumbnail's lightbox
-      document.getElementById("lb3").src = data.images[3];
-    }
-
   })
   .catch(err => {
     console.error(err);
     alert("Backend not reachable");
   });
 </script>
-
 </body>
 </html>
