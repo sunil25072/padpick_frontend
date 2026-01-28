@@ -75,15 +75,15 @@ form.addEventListener("submit", async (e) => {
 
   const formData = new FormData();
 
-  // text fields
+  // ✅ text fields (type-safe)
   formData.append("name", form.name.value);
   formData.append("contact_number", form.contact_number.value);
-  formData.append("price", form.price.value);
-  formData.append("area_id", form.area_id.value);
+  formData.append("price", Number(form.price.value));
+  formData.append("area_id", Number(form.area_id.value));
   formData.append("address", form.address.value);
-  formData.append("user_id", localStorage.getItem("user_id"));
+  formData.append("user_id", Number(localStorage.getItem("user_id")));
 
-  // 🔥 MERGE ALL 4 IMAGE INPUTS INTO house_images
+  // ✅ merge all 4 image inputs into house_images
   const imageInputs = [
     form.house_images,
     form.kitchen_images,
@@ -92,7 +92,7 @@ form.addEventListener("submit", async (e) => {
   ];
 
   for (const input of imageInputs) {
-    if (input.files.length === 0) {
+    if (!input.files || input.files.length === 0) {
       alert("Please upload all 4 images");
       return;
     }
@@ -106,20 +106,29 @@ form.addEventListener("submit", async (e) => {
     });
 
     const data = await res.json();
+    console.log("Backend response:", data); // 🔥 debug
 
+    // ❌ error handling FIX (no more [object Object])
     if (!res.ok) {
-      alert(data.detail || "Property upload failed");
+      alert(
+        typeof data.detail === "string"
+          ? data.detail
+          : data.detail?.[0]?.msg || "Property upload failed"
+      );
       return;
     }
 
+    // ✅ success
     alert("Property posted successfully 🎉");
     window.location.href = `./Pg&Areas.html?home_id=${data.home_id}`;
 
   } catch (err) {
+    console.error(err);
     alert("Backend not reachable");
   }
 });
 </script>
+
 
 
 </body>
