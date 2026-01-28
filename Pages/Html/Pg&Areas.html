@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Home Details</title>
-  <link rel="stylesheet" href="../Css/Pg&Areas.css">
+  <link rel="stylesheet" href="../Css/Pg&Areas.css"
 
   <!-- UN EXISTING CSS -->
   <link rel="stylesheet" href="../../Css/pg,home.css">
@@ -72,21 +72,22 @@
 <!-- ================= JAVASCRIPT ================= -->
 <script>
 /*
-  EXPECTED BACKEND RESPONSE:
+EXPECTED BACKEND RESPONSE (Cloudinary URLs):
 
-  {
-    "id": 5,
-    "name": "Green View PG",
-    "price": 8000,
-    "description": "WiFi, 24x7 Water, Food, AC Rooms",
-    "address": "No.12, Velachery Main Road",
-    "contact_number": "9876543210",
-    "images": [
-      "home5_1.jpg",
-      "home5_2.jpg",
-      "home5_3.jpg"
-    ]
-  }
+{
+  "id": 5,
+  "name": "Green View PG",
+  "price": 8000,
+  "description": "WiFi, 24x7 Water, Food, AC Rooms",
+  "address": "No.12, Velachery Main Road",
+  "contact_number": "9876543210",
+  "images": [
+    "https://res.cloudinary.com/xxx/img1.jpg",
+    "https://res.cloudinary.com/xxx/img2.jpg",
+    "https://res.cloudinary.com/xxx/img3.jpg",
+    "https://res.cloudinary.com/xxx/img4.jpg"
+  ]
+}
 */
 
 const params = new URLSearchParams(window.location.search);
@@ -96,39 +97,47 @@ if (!homeId) {
   alert("Invalid Home");
 }
 
-// BACKEND IMAGE BASE URL
-const IMG_BASE = "http://127.0.0.1:8000/uploads/";
-
+/* 🔥 FETCH HOME DETAILS */
 fetch(`http://127.0.0.1:8000/homes/${homeId}`)
   .then(res => res.json())
   .then(data => {
-    console.log("HOME DATA:", data);
+    console.log("HOME DATA 👉", data);
 
-    // TITLE
+    /* ================= TEXT ================= */
     document.getElementById("homeTitle").innerText = data.name;
-
-    // TEXT DETAILS
     document.getElementById("price").innerText = data.price;
     document.getElementById("facilities").innerText = data.description;
     document.getElementById("address").innerText = data.address;
     document.getElementById("contact").innerText = data.contact_number;
 
-    // IMAGES (USER UPLOADED)
-    if (data.images && data.images.length >= 3) {
+    if (!data.images || data.images.length === 0) return;
 
-      // MAIN IMAGE
-      document.getElementById("mainImg").src = IMG_BASE + data.images[0];
+    /* ================= IMAGES ================= */
 
-      // THUMBNAILS
-      document.getElementById("thumb1").src = IMG_BASE + data.images[0];
-      document.getElementById("thumb2").src = IMG_BASE + data.images[1];
-      document.getElementById("thumb3").src = IMG_BASE + data.images[2];
+    // 🔥 MAIN IMAGE = FIRST IMAGE
+    document.getElementById("mainImg").src =
+      data.images[0] + "?v=" + Date.now();
 
-      // LIGHTBOX
-      document.getElementById("lb1").src = IMG_BASE + data.images[0];
-      document.getElementById("lb2").src = IMG_BASE + data.images[1];
-      document.getElementById("lb3").src = IMG_BASE + data.images[2];
+    // IDs already in your HTML (DESIGN UNCHANGED)
+    const thumbIds = ["thumb1", "thumb2", "thumb3"];
+    const lightboxIds = ["lb1", "lb2", "lb3"];
+
+    // Remaining images (after main image)
+    const restImages = data.images.slice(1);
+
+    for (let i = 0; i < thumbIds.length; i++) {
+      if (restImages[i]) {
+        document.getElementById(thumbIds[i]).src = restImages[i];
+        document.getElementById(lightboxIds[i]).src = restImages[i];
+      }
     }
+
+    /* ================= 4th IMAGE HANDLING ================= */
+    if (data.images.length === 4) {
+      // 4th image is shown in 3rd thumbnail's lightbox
+      document.getElementById("lb3").src = data.images[3];
+    }
+
   })
   .catch(err => {
     console.error(err);

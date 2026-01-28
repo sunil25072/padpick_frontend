@@ -36,49 +36,51 @@
 </footer>
 
 <script>
-/* 1️⃣ URL-la irundhu area_id eduthuko */
 const params = new URLSearchParams(window.location.search);
 const areaId = params.get("area_id");
 
+const list = document.getElementById("pgList");
+const msg = document.getElementById("msg");
+const title = document.getElementById("areaTitle");
+
 if (!areaId) {
-    document.getElementById("msg").innerText = "Invalid Area";
+  msg.innerText = "Invalid Area";
 }
 
-/* 2️⃣ Backend call */
+/* 🔥 CALL BACKEND */
 fetch(`http://127.0.0.1:8000/homes/by-area/${areaId}`)
-    .then(res => res.json())
-    .then(data => {
-        const list = document.getElementById("pgList");
-        const msg = document.getElementById("msg");
-        const title = document.getElementById("areaTitle");
+  .then(res => res.json())
+  .then(data => {
 
-        if (!data || data.length === 0) {
-            title.innerText = "No Homes Found";
-            msg.innerText = "This area has no PGs or Homes";
-            return;
-        }
+    if (!data || data.length === 0) {
+      title.innerText = "No Homes Found";
+      msg.innerText = "This area has no homes";
+      return;
+    }
 
-        /* 3️⃣ Area name title */
-        title.innerText = data[0].area;
+    // 🔥 Area title
+    title.innerText = data[0].area_name;
 
-        /* 4️⃣ Cards create pannu */
-        data.forEach(home => {
-            list.innerHTML += `
-                <div class="pg-card">
-                    <img src="../../Asset/velachery 1.jpg">
-                    <div class="content">
-                        <h3>${home.name}</h3>
-                        <p>₹ ${home.price} / month</p>
-                        <a href="./home_details.html?home_id=${home.id}" class="btn">View Details</a>
-                    </div>
-                </div>
-            `;
-        });
-    })
-    .catch(() => {
-        document.getElementById("msg").innerText =
-            "Backend not reachable";
+    list.innerHTML = "";
+
+    data.forEach(home => {
+      list.innerHTML += `
+        <div class="pg-card">
+          <img src="${home.images[0]}" />
+          <div class="content">
+            <h3>${home.name}</h3>
+            <p>₹ ${home.price} / month</p>
+            <a href="./home_details.html?home_id=${home.id}" class="btn">
+              View Details
+            </a>
+          </div>
+        </div>
+      `;
     });
+  })
+  .catch(() => {
+    msg.innerText = "Backend not reachable";
+  });
 </script>
 
 </body>

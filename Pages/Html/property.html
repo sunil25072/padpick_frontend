@@ -27,12 +27,15 @@
             <h2>Post Your Property</h2>
 
 <form
+  id="propertyForm"
   action="http://127.0.0.1:8000/homes/add"
   method="post"
   enctype="multipart/form-data"
 >
 
   <input type="text" name="name" placeholder="Surya's Home" required>
+
+  <input type="tel" name="contact_number" placeholder="Mobile number" required>
 
   <input type="number" name="price" placeholder="₹ Amount" required>
 
@@ -70,4 +73,43 @@
     </footer>
 
 </body>
+<script>
+const form = document.getElementById("propertyForm");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const userId = localStorage.getItem("user_id");
+  if (!userId) {
+    alert("Please login again");
+    return;
+  }
+
+  const formData = new FormData(form);
+
+  // 🔥 attach user_id
+  formData.append("user_id", userId);
+
+  try {
+    const res = await fetch("http://localhost:8000/homes/add", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.detail || "Property upload failed");
+      return;
+    }
+    alert("Property posted successfully 🎉");
+
+    // 🔥 DIRECTLY GO TO HOME DETAILS PAGE WITH home_id
+    window.location.href = `./Pg&Areas.html?home_id=${data.home_id}`;
+
+  } catch (err) {
+    alert("Backend not reachable");
+  }
+});
+</script>
 </html>
