@@ -76,6 +76,38 @@
   margin: 8px 0;
 }
 
+      .logout-btn {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        background-color: #4f6ef7;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .logout-btn:hover {
+        background-color: #3c5ae0;
+      }
+
+      .delete-btn {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        background-color: red;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .delete-btn:hover {
+        background-color: darkred;
+      }
+
 /* ---------- BUTTONS ---------- */
 
 .edit-btn {

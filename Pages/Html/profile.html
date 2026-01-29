@@ -42,15 +42,18 @@
         </button>
 
         <button class="edit-btn">
-	        <a class="love" href="./property.html">Post Property</a>
-        </button>
-        <button class="edit-btn">
-	        <a class="love" href="./user_property.html">See your Property</a>
+            <a class="love" href="./property.html">Post Property</a>
         </button>
 
-        <button class="edit-btns" id="deleteBtn">
-            <a class="love">Delete Profile</a>
+        <button class="edit-btn">
+            <a class="love" href="./user_property.html">See your Property</a>
         </button>
+
+        <!-- ✅ LOGOUT -->
+        <button class="edit-btns" id="logout">Log Out</button>
+
+        <!-- ✅ DELETE -->
+        <button class="edit-btns" id="deleteBtn">Delete Profile</button>
 
         <p id="message" style="color:red;text-align:center;"></p>
 
@@ -65,16 +68,25 @@
 const userId = localStorage.getItem("user_id");
 const message = document.getElementById("message");
 
+// 🔐 Login check
 if (!userId) {
     message.innerText = "Please login again";
 } else {
     loadProfile();
 }
 
-document
-  .getElementById("deleteBtn")
-  .addEventListener("click", deleteProfile);
+// 🔓 Logout
+document.getElementById("logout").addEventListener("click", () => {
+    if (!confirm("Do you want to logout?")) return;
 
+    localStorage.removeItem("user_id");
+    window.location.href = "../../index.html";
+});
+
+// ❌ Delete profile
+document.getElementById("deleteBtn").addEventListener("click", deleteProfile);
+
+// 📥 Load profile
 async function loadProfile() {
     try {
         const res = await fetch(
@@ -82,7 +94,6 @@ async function loadProfile() {
         );
 
         const data = await res.json();
-        console.log("PROFILE DATA 👉", data);
 
         if (!res.ok) {
             message.innerText = data.detail || "Failed to load profile";
@@ -91,36 +102,39 @@ async function loadProfile() {
 
         document.getElementById("username").innerText = data.username || "-";
         document.getElementById("email").innerText = data.email || "-";
-        document.getElementById("mobile").innerText =
-            data.mobile_number || "-";
-        document.getElementById("location").innerText =
-            data.location || "-";
-
+        document.getElementById("mobile").innerText = data.mobile_number || "-";
+        document.getElementById("location").innerText = data.location || "-";
 
         const profileImg = document.getElementById("profileImg");
-
-        if (data.profile_img && data.profile_img !== "") {
-            profileImg.src = data.profile_img + "?v=" + Date.now(); // 🔥 cache bust
+        if (data.profile_img) {
+            profileImg.src = data.profile_img + "?v=" + Date.now();
         } else {
             profileImg.src = "../../Asset/profile.jpg";
         }
 
-    } catch (error) {
+    } catch (err) {
         message.innerText = "Backend not reachable";
     }
 }
 
+// 🗑️ Delete profile function
 async function deleteProfile() {
     if (!confirm("Are you sure you want to delete your profile?")) return;
 
-    const res = await fetch(
-        `http://localhost:8000/users/${userId}`,
-        { method: "DELETE" }
-    );
+    try {
+        const res = await fetch(
+            `http://localhost:8000/users/${userId}`,
+            { method: "DELETE" }
+        );
 
-    if (res.ok) {
-        localStorage.removeItem("user_id");
-        window.location.href = "../../index.html";
+        if (res.ok) {
+            localStorage.removeItem("user_id");
+            window.location.href = "../../index.html";
+        } else {
+            message.innerText = "Failed to delete profile";
+        }
+    } catch (err) {
+        message.innerText = "Server error";
     }
 }
 </script>
