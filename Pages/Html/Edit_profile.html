@@ -63,7 +63,7 @@ async function updateProfile(event) {
     formData.append("file", imageInput.files[0]);
 
     const imgRes = await fetch(
-      `http://localhost:8000/users/${userId}/upload-profile-image`,
+      `https://padpick-backend.vercel.app/users/${userId}/upload-profile-image`,
       {
         method: "POST",
         body: formData
@@ -93,7 +93,7 @@ async function updateProfile(event) {
 
   if (Object.keys(payload).length > 0) {
     const res = await fetch(
-      `http://localhost:8000/users/${userId}/profile`,
+      `https://padpick-backend.vercel.app/users/${userId}/profile`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

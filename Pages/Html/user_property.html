@@ -45,7 +45,7 @@ if (!userId) {
 }
 
 function loadMyProperties() {
-    fetch(`http://127.0.0.1:8000/homes/by-user/${userId}`)
+    fetch(`https://padpick-backend.vercel.app/homes/by-user/${userId}`)
         .then(res => res.json())
         .then(data => {
             console.log("MY PROPERTIES 👉", data);

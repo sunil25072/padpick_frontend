@@ -59,7 +59,7 @@ const areaNames = {
 title.innerText = areaNames[areaId] || "Homes";
 
 /* 🔥 FETCH HOMES BY AREA */
-fetch(`http://127.0.0.1:8000/homes/by-area/${areaId}`)
+fetch(`https://padpick-backend.vercel.app/homes/by-area/${areaId}`)
   .then(res => res.json())
   .then(data => {
 

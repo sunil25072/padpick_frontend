@@ -76,7 +76,7 @@ if (!homeId) {
   window.location.href = "../home.html";
 }
 
-fetch(`http://127.0.0.1:8000/homes/${homeId}`)
+fetch(`https://padpick-backend.vercel.app/homes/${homeId}`)
   .then(res => {
     if (!res.ok) throw new Error("Home not found");
     return res.json();

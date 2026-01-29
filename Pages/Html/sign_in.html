@@ -65,7 +65,7 @@
       message.innerText = "";
 
       try {
-        const res = await fetch("http://localhost:8000/users/signup", {
+        const res = await fetch("https://padpick-backend.vercel.app/users/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
