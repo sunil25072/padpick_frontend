@@ -77,53 +77,50 @@
   </div>
 
   <script>
-    const API_BASE = "https://padpick-backend.vercel.app";
+  const API_BASE = "https://padpick-backend.vercel.app";
 
-    async function signup(event) {
-      event.preventDefault();
+  async function signup(event) {
+    event.preventDefault();
 
-      const message = document.getElementById("message");
-      message.style.color = "red";
-      message.innerText = "";
+    const message = document.getElementById("message");
+    message.style.color = "red";
+    message.innerText = "";
 
-      const payload = {
-        username: document.getElementById("username").value.trim(),
-        email: document.getElementById("email").value.trim(),
-        password: document.getElementById("password").value,
-        mobile_number: document.getElementById("mobile_number").value.trim(),
-        location: document.getElementById("location").value.trim()
-      };
+    // 🔥 USE FormData (NO JSON, NO CORS PREFLIGHT)
+    const formData = new FormData();
+    formData.append("username", document.getElementById("username").value.trim());
+    formData.append("email", document.getElementById("email").value.trim());
+    formData.append("password", document.getElementById("password").value);
+    formData.append("mobile_number", document.getElementById("mobile_number").value.trim());
+    formData.append("location", document.getElementById("location").value.trim());
 
-      try {
-        const res = await fetch(`${API_BASE}/users/signup`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        });
+    try {
+      const res = await fetch(`${API_BASE}/users/signup`, {
+        method: "POST",
+        body: formData   // ❌ NO headers
+      });
 
-        const data = await res.json();
+      const data = await res.json();
 
-        if (!res.ok) {
-          message.innerText = data.detail || "Signup failed";
-          return;
-        }
-
-        message.style.color = "green";
-        message.innerText = data.message;
-
-        // ✅ Redirect after success
-        setTimeout(() => {
-          window.location.href = "../../index.html";
-        }, 800);
-
-      } catch (error) {
-        console.error(error);
-        message.innerText = "Backend not reachable";
+      if (!res.ok) {
+        message.innerText = data.detail || "Signup failed";
+        return;
       }
+
+      message.style.color = "green";
+      message.innerText = data.message;
+
+      setTimeout(() => {
+        window.location.href = "../../index.html";
+      }, 800);
+
+    } catch (error) {
+      console.error(error);
+      message.innerText = "Backend not reachable";
     }
-  </script>
+  }
+</script>
+
 
 </body>
 </html>
