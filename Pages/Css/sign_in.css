@@ -10,8 +10,17 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url(/Asset/Spider-Man\ &\ Gwen\ Aesthetic_.jpg);
   background-size: cover;
+}
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/Asset/luxurious-villa-with-modern-architectural-design.jpg");
+  background-size: cover;
+  background-position: center;
+  opacity: 60%;   
+  z-index: -1;
 }
 
 .signup-container {
