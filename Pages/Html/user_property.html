@@ -45,29 +45,36 @@ if (!userId) {
 }
 
 function loadMyProperties() {
+    list.innerHTML = "";
+    msg.innerText = "";
+
     fetch(`https://padpick-backend.vercel.app/homes/by-user/${userId}`)
         .then(res => res.json())
         .then(data => {
-            console.log("MY PROPERTIES 👉", data);
 
             if (!Array.isArray(data) || data.length === 0) {
                 msg.innerText = "You have not posted any property yet";
                 return;
             }
 
-            list.innerHTML = "";
-            msg.innerText = "";
-
             data.forEach(home => {
                 list.innerHTML += `
                     <div class="pg-card">
                         <img src="${home.img1}" alt="${home.name}">
+
                         <div class="content">
                             <h3>${home.name}</h3>
                             <p>₹ ${home.price} / month</p>
-                            <a href="./Pg&Areas.html?home_id=${home.id}" class="btn">
-                                View Details
-                            </a>
+
+                            <div class="action-buttons">
+                                <a href="./Edit_property.html?home_id=${home.id}" class="btn edit-btn">
+                                    Edit
+                                </a>
+
+                                <button class="btn delete-btn" onclick="deleteHome(${home.id})">
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -77,6 +84,23 @@ function loadMyProperties() {
             console.error(err);
             msg.innerText = "Backend not reachable";
         });
+}
+
+function deleteHome(homeId) {
+    if (!confirm("Are you sure you want to delete this property?")) return;
+
+    fetch(`https://padpick-backend.vercel.app/homes/${homeId}`, {
+        method: "DELETE"
+    })
+    .then(res => res.json())
+    .then(() => {
+        alert("Property deleted successfully ✅");
+        loadMyProperties();
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Delete failed ❌");
+    });
 }
 </script>
 

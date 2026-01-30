@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Property</title>
+  <link rel="stylesheet" href="../Css/edit_property.css">
+</head>
+
+<body>
+
+<header class="header">
+  <h1 class="logo">Padpick</h1>
+  <nav class="navbar">
+    <ul>
+      <li><a href="./home.html">Home</a></li>
+      <li><a href="./Areas.html">Areas</a></li>
+      <li><a href="./profile.html">Profile</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="form-container">
+  <div class="form-card">
+    <h2>Edit Your Property</h2>
+
+    <form id="editPropertyForm" enctype="multipart/form-data">
+
+      <input type="text" name="name" placeholder="Property Name">
+
+      <input type="tel" name="contact_number" placeholder="Mobile number">
+
+      <input type="number" name="price" placeholder="₹ Amount">
+
+      <select name="area_id">
+        <option value="">Select Area</option>
+        <option value="1">Anna Nagar</option>
+        <option value="2">Perungudi</option>
+        <option value="3">T Nagar</option>
+        <option value="4">Velachery</option>
+      </select>
+
+      <textarea name="address" placeholder="Address"></textarea>
+
+      <!-- OPTIONAL IMAGES -->
+      <label>House Image (optional)</label>
+      <input type="file" name="house_images" accept="image/*">
+
+      <label>Kitchen Image (optional)</label>
+      <input type="file" name="kitchen_images" accept="image/*">
+
+      <label>Bathroom Image (optional)</label>
+      <input type="file" name="bathroom_images" accept="image/*">
+
+      <label>Hall Image (optional)</label>
+      <input type="file" name="hall_images" accept="image/*">
+
+      <button type="submit">Update Property</button>
+      <p id="message" style="text-align:center;color:red;"></p>
+
+    </form>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>&copy; 2025 Padpick. All rights reserved.</p>
+</footer>
+
+<script>
+const form = document.getElementById("editPropertyForm");
+const message = document.getElementById("message");
+
+const params = new URLSearchParams(window.location.search);
+const homeId = params.get("home_id");
+
+if (!homeId) {
+  message.innerText = "Invalid property";
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  message.innerText = "";
+
+  const formData = new FormData();
+
+  // ✅ TEXT FIELDS (only if user entered)
+  if (form.name.value) formData.append("name", form.name.value);
+  if (form.contact_number.value)
+    formData.append("contact_number", form.contact_number.value);
+  if (form.price.value)
+    formData.append("price", Number(form.price.value));
+  if (form.area_id.value)
+    formData.append("area_id", Number(form.area_id.value));
+  if (form.address.value)
+    formData.append("address", form.address.value);
+
+  // ✅ IMAGES (optional)
+  const imageInputs = [
+    form.house_images,
+    form.kitchen_images,
+    form.bathroom_images,
+    form.hall_images
+  ];
+
+  let hasImage = false;
+  for (const input of imageInputs) {
+    if (input.files && input.files.length > 0) {
+      formData.append("house_images", input.files[0]);
+      hasImage = true;
+    }
+  }
+
+  if ([...formData.keys()].length === 0) {
+    message.innerText = "No changes to update";
+    return;
+  }
+
+  try {
+    const res = await fetch(
+      `https://padpick-backend.vercel.app/homes/${homeId}`,
+      {
+        method: "PUT",
+        body: formData
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      message.innerText =
+        typeof data.detail === "string"
+          ? data.detail
+          : "Update failed";
+      return;
+    }
+
+    message.style.color = "green";
+    message.innerText = "Property updated successfully ✅";
+
+    setTimeout(() => {
+      window.location.href = "./my-properties.html";
+    }, 1000);
+
+  } catch (err) {
+    console.error(err);
+    message.innerText = "Backend not reachable";
+  }
+});
+</script>
+
+</body>
+</html>
