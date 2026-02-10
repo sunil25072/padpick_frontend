@@ -57,7 +57,7 @@
       <label>Upload Hall Image</label>
       <input type="file" name="hall_images" accept="image/*" required>
 
-      <button type="submit">Post Property</button>
+      <button type="submit" id="submitBtn">Post Property</button>
     </form>
   </div>
 </main>
@@ -69,21 +69,44 @@
 <!-- ================= JS ================= -->
 <script>
 const form = document.getElementById("propertyForm");
+const submitBtn = document.getElementById("submitBtn");
 
+/* 🔐 PAGE LOAD LOGIN CHECK */
+const userId = localStorage.getItem("user_id");
+if (!userId) {
+  alert("Please login to post property");
+  window.location.href = "./login.html";
+}
+
+/* 📤 FORM SUBMIT */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  // 🔐 login safety (double check)
+  const userId = localStorage.getItem("user_id");
+  if (!userId) {
+    alert("Please login to post property");
+    window.location.href = "./login.html";
+    return;
+  }
+
+  // 🔒 disable button + loading
+  submitBtn.disabled = true;
+  submitBtn.innerText = "Posting...";
+  submitBtn.style.opacity = "0.7";
+  submitBtn.style.cursor = "not-allowed";
+
   const formData = new FormData();
 
-  // ✅ text fields (type-safe)
+  // 📝 text fields
   formData.append("name", form.name.value);
   formData.append("contact_number", form.contact_number.value);
   formData.append("price", Number(form.price.value));
   formData.append("area_id", Number(form.area_id.value));
   formData.append("address", form.address.value);
-  formData.append("user_id", Number(localStorage.getItem("user_id")));
+  formData.append("user_id", Number(userId));
 
-  // ✅ merge all 4 image inputs into house_images
+  // 🖼️ image inputs
   const imageInputs = [
     form.house_images,
     form.kitchen_images,
@@ -94,6 +117,12 @@ form.addEventListener("submit", async (e) => {
   for (const input of imageInputs) {
     if (!input.files || input.files.length === 0) {
       alert("Please upload all 4 images");
+
+      // 🔓 enable back
+      submitBtn.disabled = false;
+      submitBtn.innerText = "Post Property";
+      submitBtn.style.opacity = "1";
+      submitBtn.style.cursor = "pointer";
       return;
     }
     formData.append("house_images", input.files[0]);
@@ -106,15 +135,19 @@ form.addEventListener("submit", async (e) => {
     });
 
     const data = await res.json();
-    console.log("Backend response:", data); // 🔥 debug
 
-    // ❌ error handling FIX (no more [object Object])
+    // ❌ backend error
     if (!res.ok) {
       alert(
         typeof data.detail === "string"
           ? data.detail
           : data.detail?.[0]?.msg || "Property upload failed"
       );
+
+      submitBtn.disabled = false;
+      submitBtn.innerText = "Post Property";
+      submitBtn.style.opacity = "1";
+      submitBtn.style.cursor = "pointer";
       return;
     }
 
@@ -125,11 +158,12 @@ form.addEventListener("submit", async (e) => {
   } catch (err) {
     console.error(err);
     alert("Backend not reachable");
+
+    // 🔓 network fail
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Post Property";
+    submitBtn.style.opacity = "1";
+    submitBtn.style.cursor = "pointer";
   }
 });
 </script>
-
-
-
-</body>
-</html>

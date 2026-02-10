@@ -48,7 +48,7 @@ if (!areaId) {
   msg.innerText = "Area not found";
 }
 
-/* 🔥 AREA NAME MAP */
+
 const areaNames = {
   1: "Anna Nagar",
   2: "Perungudi",
@@ -58,7 +58,7 @@ const areaNames = {
 
 title.innerText = areaNames[areaId] || "Homes";
 
-/* 🔥 FETCH HOMES BY AREA */
+
 fetch(`https://padpick-backend.vercel.app/homes/by-area/${areaId}`)
   .then(res => res.json())
   .then(data => {

@@ -82,7 +82,7 @@ fetch(`https://padpick-backend.vercel.app/homes/${homeId}`)
     return res.json();
   })
   .then(data => {
-    console.log("HOME DATA 👉", data);
+    console.log("HOME DATA ", data);
 
     document.getElementById("homeTitle").innerText = data.name;
     document.getElementById("price").innerText = data.price;

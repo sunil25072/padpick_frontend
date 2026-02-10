@@ -49,10 +49,10 @@
             <a class="love" href="./user_property.html">See your Property</a>
         </button>
 
-        <!-- ✅ LOGOUT -->
+        <!--  LOGOUT -->
         <button class="edit-btns" id="logout">Log Out</button>
 
-        <!-- ✅ DELETE -->
+        <!--  DELETE -->
         <button class="edit-btns" id="deleteBtn">Delete Profile</button>
 
         <p id="message" style="color:red;text-align:center;"></p>
@@ -68,7 +68,7 @@
 const userId = localStorage.getItem("user_id");
 const message = document.getElementById("message");
 
-// 🔐 Login check
+//  Login check
 if (!userId) {
     message.innerText = "Please login again";
 } else {
@@ -87,11 +87,12 @@ document.getElementById("logout").addEventListener("click", () => {
 document.getElementById("deleteBtn").addEventListener("click", deleteProfile);
 
 // 📥 Load profile
-async function loadProfile() {
-    try {
-        const res = await fetch(
-            `https://padpick-backend.vercel.app/users/${userId}/profile`
-        );
+    async function loadProfile() {
+        try {
+            const res = await fetch(
+                `https://padpick-backend.vercel.app/users/${userId}/profile`
+
+            );
 
         const data = await res.json();
 
