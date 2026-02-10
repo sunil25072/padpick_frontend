@@ -6,65 +6,42 @@
   <title>Create Account</title>
   <link rel="stylesheet" href="../Css/sign_in.css" />
 </head>
+
 <body>
 
   <div class="signup-container">
     <h1>Create Account</h1>
 
-    <!-- ✅ NO <a> WRAP, ONLY FORM -->
-    <form onsubmit="signup(event)">
+    <form id="signupForm">
 
       <div class="input-box">
         <label>Full Name</label>
-        <input
-          type="text"
-          id="username"
-          placeholder="Enter your full name"
-          required
-        />
+        <input type="text" id="username" placeholder="Enter your full name" required />
       </div>
 
       <div class="input-box">
         <label>Email</label>
-        <input
-          type="email"
-          id="email"
-          placeholder="Enter your email"
-          required
-        />
+        <input type="email" id="email" placeholder="Enter your email" required />
       </div>
 
       <div class="input-box">
         <label>Password</label>
-        <input
-          type="password"
-          id="password"
-          placeholder="Create a password"
-          required
-        />
+        <input type="password" id="password" placeholder="Create a password" required />
       </div>
 
       <div class="input-box">
         <label>Phone number</label>
-        <input
-          type="text"
-          id="mobile_number"
-          placeholder="Enter phone number"
-          required
-        />
+        <input type="text" id="mobile_number" placeholder="Enter phone number" required />
       </div>
 
       <div class="input-box">
         <label>Location</label>
-        <input
-          type="text"
-          id="location"
-          placeholder="Enter location"
-          required
-        />
+        <input type="text" id="location" placeholder="Enter location" required />
       </div>
 
-      <button type="submit" class="btn">Sign Up</button>
+      <button type="submit" class="btn" id="signupBtn">
+        Sign Up
+      </button>
 
       <p id="message" style="text-align:center; margin-top:10px;"></p>
 
@@ -76,51 +53,71 @@
     </form>
   </div>
 
-  <script>
-  const API_BASE = "https://padpick-backend.vercel.app";
+<script>
+/* ================= CONFIG ================= */
+const API_BASE = "https://padpick-backend.vercel.app";
 
-  async function signup(event) {
-    event.preventDefault();
+/* ================= ELEMENTS ================= */
+const form = document.getElementById("signupForm");
+const message = document.getElementById("message");
+const signupBtn = document.getElementById("signupBtn");
 
-    const message = document.getElementById("message");
-    message.style.color = "red";
-    message.innerText = "";
+/* ================= SIGNUP ================= */
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    // 🔥 USE FormData (NO JSON, NO CORS PREFLIGHT)
-    const formData = new FormData();
-    formData.append("username", document.getElementById("username").value.trim());
-    formData.append("email", document.getElementById("email").value.trim());
-    formData.append("password", document.getElementById("password").value);
-    formData.append("mobile_number", document.getElementById("mobile_number").value.trim());
-    formData.append("location", document.getElementById("location").value.trim());
+  message.innerText = "";
+  message.style.color = "red";
 
-    try {
-      const res = await fetch(`${API_BASE}/users/signup`, {
-        method: "POST",
-        body: formData   // ❌ NO headers
-      });
+  // 🔒 loading state
+  signupBtn.disabled = true;
+  signupBtn.innerText = "Creating...";
+  signupBtn.style.opacity = "0.7";
 
-      const data = await res.json();
+  const formData = new FormData();
+  formData.append("username", document.getElementById("username").value.trim());
+  formData.append("email", document.getElementById("email").value.trim());
+  formData.append("password", document.getElementById("password").value);
+  formData.append("mobile_number", document.getElementById("mobile_number").value.trim());
+  formData.append("location", document.getElementById("location").value.trim());
 
-      if (!res.ok) {
-        message.innerText = data.detail || "Signup failed";
-        return;
-      }
+  try {
+    const res = await fetch(`${API_BASE}/users/signup`, {
+      method: "POST",
+      body: formData,
+      mode: "cors",
+      cache: "no-store"
+    });
 
-      message.style.color = "green";
-      message.innerText = data.message;
+    const data = await res.json();
 
-      setTimeout(() => {
-        window.location.href = "../../index.html";
-      }, 800);
-
-    } catch (error) {
-      console.error(error);
-      message.innerText = "Backend not reachable";
+    if (!res.ok) {
+      message.innerText = data.detail || "Signup failed";
+      resetButton();
+      return;
     }
-  }
-</script>
 
+    message.style.color = "green";
+    message.innerText = "Account created successfully ✅";
+
+    setTimeout(() => {
+      window.location.href = "../../index.html";
+    }, 1000);
+
+  } catch (err) {
+    console.error("Signup error:", err);
+    message.innerText = "Network error. Please check internet.";
+    resetButton();
+  }
+});
+
+/* ================= HELPERS ================= */
+function resetButton() {
+  signupBtn.disabled = false;
+  signupBtn.innerText = "Sign Up";
+  signupBtn.style.opacity = "1";
+}
+</script>
 
 </body>
 </html>
