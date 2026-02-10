@@ -6,12 +6,13 @@
 <title>Edit Profile</title>
 <link rel="stylesheet" href="../Css/Edit_profile.css">
 </head>
+
 <body>
 
 <div class="profile-container">
   <h2>Edit Profile</h2>
 
-  <form class="profile-form" onsubmit="updateProfile(event)">
+  <form class="profile-form" id="profileForm">
     <div class="form-group">
       <label>Full Name</label>
       <input type="text" id="username" placeholder="Enter name">
@@ -32,17 +33,24 @@
       <input type="file" id="profile_image" accept="image/*">
     </div>
 
-    <button class="save-btn" type="submit">Save Changes</button>
+    <button class="save-btn" type="submit" id="saveBtn">
+      Save Changes
+    </button>
+
     <p id="message" style="text-align:center;color:red;"></p>
   </form>
 </div>
 
 <script>
-async function updateProfile(event) {
+const form = document.getElementById("profileForm");
+const saveBtn = document.getElementById("saveBtn");
+const message = document.getElementById("message");
+
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  const message = document.getElementById("message");
   message.innerText = "";
+  message.style.color = "red";
 
   const userId = localStorage.getItem("user_id");
   if (!userId) {
@@ -50,70 +58,89 @@ async function updateProfile(event) {
     return;
   }
 
-  const username = document.getElementById("username").value.trim();
-  const location = document.getElementById("location").value.trim();
-  const mobileVal = document.getElementById("mobile_number").value.trim();
-  const imageInput = document.getElementById("profile_image");
+  // 🔒 disable + loading
+  saveBtn.disabled = true;
+  saveBtn.innerText = "Saving...";
+  saveBtn.style.opacity = "0.7";
+  saveBtn.style.cursor = "not-allowed";
 
-  /* ===============================
-     1️⃣ UPLOAD IMAGE (CLOUDINARY)
-     =============================== */
-  if (imageInput.files.length > 0) {
-    const formData = new FormData();
-    formData.append("file", imageInput.files[0]);
+  try {
+    const username = document.getElementById("username").value.trim();
+    const location = document.getElementById("location").value.trim();
+    const mobileVal = document.getElementById("mobile_number").value.trim();
+    const imageInput = document.getElementById("profile_image");
 
-    const imgRes = await fetch(
-      `https://padpick-backend.vercel.app/users/${userId}/upload-profile-image`,
-      {
-        method: "POST",
-        body: formData
+    /* ===============================
+       1️⃣ UPLOAD IMAGE
+       =============================== */
+    if (imageInput.files.length > 0) {
+      const formData = new FormData();
+      formData.append("file", imageInput.files[0]);
+
+      const imgRes = await fetch(
+        `https://padpick-backend.vercel.app/users/${userId}/upload-profile-image`,
+        {
+          method: "POST",
+          body: formData
+        }
+      );
+
+      const imgData = await imgRes.json();
+      if (!imgRes.ok) {
+        throw new Error(imgData.detail || "Image upload failed");
       }
-    );
-
-    const imgData = await imgRes.json();
-
-    if (!imgRes.ok) {
-      message.innerText = imgData.detail || "Image upload failed";
-      return;
     }
-  }
 
-  /* ===============================
-     2️⃣ UPDATE TEXT DETAILS
-     =============================== */
-  const payload = {};
-  if (username) payload.username = username;
-  if (location) payload.location = location;
-  if (mobileVal) payload.mobile_number = Number(mobileVal);
+    /* ===============================
+       2️⃣ UPDATE TEXT DETAILS
+       =============================== */
+    const payload = {};
+    if (username) payload.username = username;
+    if (location) payload.location = location;
+    if (mobileVal) payload.mobile_number = Number(mobileVal);
 
-  if (Object.keys(payload).length === 0 && imageInput.files.length === 0) {
-    message.innerText = "No changes to update";
-    return;
-  }
+    if (Object.keys(payload).length > 0) {
+      const res = await fetch(
+        `https://padpick-backend.vercel.app/users/${userId}/profile`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }
+      );
 
-  if (Object.keys(payload).length > 0) {
-    const res = await fetch(
-      `https://padpick-backend.vercel.app/users/${userId}/profile`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.detail || "Update failed");
       }
-    );
-
-    const data = await res.json();
-    if (!res.ok) {
-      message.innerText = data.detail || "Update failed";
-      return;
     }
+
+    if (
+      Object.keys(payload).length === 0 &&
+      imageInput.files.length === 0
+    ) {
+      throw new Error("No changes to update");
+    }
+
+    message.style.color = "green";
+    message.innerText = "Profile updated successfully ✅";
+
+    setTimeout(() => {
+      window.location.href = "./profile.html";
+    }, 800);
+
+  } catch (error) {
+    console.error(error);
+    message.innerText = error.message || "Something went wrong";
+    resetButton();
   }
+});
 
-  message.style.color = "green";
-  message.innerText = "Profile updated successfully";
-
-  setTimeout(() => {
-    window.location.href = "./profile.html";
-  }, 800);
+function resetButton() {
+  saveBtn.disabled = false;
+  saveBtn.innerText = "Save Changes";
+  saveBtn.style.opacity = "1";
+  saveBtn.style.cursor = "pointer";
 }
 </script>
 
