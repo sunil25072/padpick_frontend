@@ -32,7 +32,14 @@
 
       <input type="tel" name="contact_number" placeholder="Mobile number" required>
 
-      <input type="number" name="price" placeholder="₹ Amount" required>
+      <!-- 💰 AMOUNT (no negative) -->
+      <input
+        type="number"
+        name="price"
+        placeholder="₹ Amount"
+        min="1"
+        required
+      >
 
       <select name="area_id" required>
         <option value="">Select Area</option>
@@ -57,7 +64,9 @@
       <label>Upload Hall Image</label>
       <input type="file" name="hall_images" accept="image/*" required>
 
-      <button type="submit" id="submitBtn">Post Property</button>
+      <button type="submit" id="submitBtn">
+        Post Property
+      </button>
     </form>
   </div>
 </main>
@@ -82,7 +91,7 @@ if (!userId) {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  // 🔐 login safety (double check)
+  /* 🔐 login check */
   const userId = localStorage.getItem("user_id");
   if (!userId) {
     alert("Please login to post property");
@@ -90,7 +99,14 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  // 🔒 disable button + loading
+  /* 💰 PRICE VALIDATION */
+  const priceValue = Number(form.price.value);
+  if (priceValue <= 0) {
+    alert("Amount must be greater than 0");
+    return;
+  }
+
+  /* 🔒 loading */
   submitBtn.disabled = true;
   submitBtn.innerText = "Posting...";
   submitBtn.style.opacity = "0.7";
@@ -98,15 +114,15 @@ form.addEventListener("submit", async (e) => {
 
   const formData = new FormData();
 
-  // 📝 text fields
-  formData.append("name", form.name.value);
-  formData.append("contact_number", form.contact_number.value);
-  formData.append("price", Number(form.price.value));
+  /* 📝 TEXT FIELDS */
+  formData.append("name", form.name.value.trim());
+  formData.append("contact_number", form.contact_number.value.trim());
+  formData.append("price", priceValue);
   formData.append("area_id", Number(form.area_id.value));
-  formData.append("address", form.address.value);
+  formData.append("address", form.address.value.trim());
   formData.append("user_id", Number(userId));
 
-  // 🖼️ image inputs
+  /* 🖼️ IMAGE FIELDS */
   const imageInputs = [
     form.house_images,
     form.kitchen_images,
@@ -117,53 +133,52 @@ form.addEventListener("submit", async (e) => {
   for (const input of imageInputs) {
     if (!input.files || input.files.length === 0) {
       alert("Please upload all 4 images");
-
-      // 🔓 enable back
-      submitBtn.disabled = false;
-      submitBtn.innerText = "Post Property";
-      submitBtn.style.opacity = "1";
-      submitBtn.style.cursor = "pointer";
+      resetButton();
       return;
     }
     formData.append("house_images", input.files[0]);
   }
 
   try {
-    const res = await fetch("https://padpick-backend.vercel.app/homes/add", {
-      method: "POST",
-      body: formData
-    });
+    const res = await fetch(
+      "https://padpick-backend.vercel.app/homes/add",
+      {
+        method: "POST",
+        body: formData
+      }
+    );
 
     const data = await res.json();
 
-    // ❌ backend error
     if (!res.ok) {
       alert(
         typeof data.detail === "string"
           ? data.detail
           : data.detail?.[0]?.msg || "Property upload failed"
       );
-
-      submitBtn.disabled = false;
-      submitBtn.innerText = "Post Property";
-      submitBtn.style.opacity = "1";
-      submitBtn.style.cursor = "pointer";
+      resetButton();
       return;
     }
 
-    // ✅ success
+    /* ✅ SUCCESS */
     alert("Property posted successfully 🎉");
     window.location.href = `./Pg&Areas.html?home_id=${data.home_id}`;
 
   } catch (err) {
     console.error(err);
     alert("Backend not reachable");
-
-    // 🔓 network fail
-    submitBtn.disabled = false;
-    submitBtn.innerText = "Post Property";
-    submitBtn.style.opacity = "1";
-    submitBtn.style.cursor = "pointer";
+    resetButton();
   }
 });
+
+/* 🔓 BUTTON RESET */
+function resetButton() {
+  submitBtn.disabled = false;
+  submitBtn.innerText = "Post Property";
+  submitBtn.style.opacity = "1";
+  submitBtn.style.cursor = "pointer";
+}
 </script>
+
+</body>
+</html>
