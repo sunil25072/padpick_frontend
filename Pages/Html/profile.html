@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>Profile — PadPick</title>
     <link rel="icon" href="/Asset/Screenshot_2026-02-10_215817-removebg-preview.png" type="image/x-icon">
     <link rel="stylesheet" href="../Css/profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
 </head>
 <body>
 
-<header class="header">
-    <h1 class="logo">My Profile</h1>
+<header>
+    <a class="logo" href="./home.html">Pad<span>Pick</span></a>
     <nav class="navbar">
         <ul>
             <li><a href="./home.html">Home</a></li>
@@ -20,49 +22,61 @@
     </nav>
 </header>
 
-<main class="profile-container">
+<main>
     <div class="profile-card">
 
-        <img
-            id="profileImg"
-            src="../../Asset/profile.jpg"
-            alt="Profile Image"
-            class="profile-img"
-        >
+        <div class="card-banner"></div>
 
-        <h2 id="username">Loading...</h2>
-        <p class="email" id="email">Loading...</p>
-
-        <div class="profile-info">
-            <p><strong>Phone:</strong> <span id="mobile">Loading...</span></p>
-            <p><strong>Location:</strong> <span id="location">Loading...</span></p>
+        <div class="avatar-wrap">
+            <img
+                id="profileImg"
+                src="../../Asset/profile.jpg"
+                alt="Profile Image"
+                class="profile-img">
         </div>
 
-        <button class="edit-btn">
-            <a class="love" href="./Edit_profile.html">Edit Profile</a>
-        </button>
+        <div class="card-body">
+            <h2 id="username">Loading...</h2>
+            <p class="email" id="email">Loading...</p>
 
-        <button class="edit-btn">
-            <a class="love" href="./property.html">Post Property</a>
-        </button>
+            <div class="info-grid">
+                <div class="info-tile">
+                    <div class="tile-label">Phone</div>
+                    <div class="tile-value" id="mobile">—</div>
+                </div>
+                <div class="info-tile">
+                    <div class="tile-label">Location</div>
+                    <div class="tile-value" id="location">—</div>
+                </div>
+            </div>
 
-        <button class="edit-btn">
-            <a class="love" href="./user_property.html">See your Property</a>
-        </button>
+            <hr class="divider">
 
-        <!--  LOGOUT -->
-        <button class="edit-btns" id="logout">Log Out</button>
+            <div class="btn-group">
+                <button class="edit-btn">
+                    <a class="love" href="./Edit_profile.html">Edit Profile</a>
+                </button>
+                <button class="edit-btn">
+                    <a class="love" href="./property.html">Post Property</a>
+                </button>
+                <button class="edit-btn">
+                    <a class="love" href="./user_property.html">See your Property</a>
+                </button>
+            </div>
 
-        <!--  DELETE -->
-        <button class="edit-btns" id="deleteBtn">Delete Profile</button>
+            <div class="danger-zone">
+                <button class="btn-danger" id="logout">Log Out</button>
+                <button class="btn-danger" id="deleteBtn">Delete Profile</button>
+            </div>
 
-        <p id="message" style="color:red;text-align:center;"></p>
+            <p id="message"></p>
+        </div>
 
     </div>
 </main>
 
-<footer id="copy">
-    <p>&copy;2025 Padpick. All rights Reserved</p>
+<footer>
+    &copy; 2025 <span>PadPick</span>. All rights reserved.
 </footer>
 
 <script>
@@ -142,4 +156,4 @@ async function deleteProfile() {
 </script>
 
 </body>
-</html>
+</html> 

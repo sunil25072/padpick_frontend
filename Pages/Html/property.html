@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Post Property</title>
+  <title>Post Property — PadPick</title>
   <link rel="icon" href="/Asset/Screenshot_2026-02-10_215817-removebg-preview.png" type="image/x-icon">
   <link rel="stylesheet" href="../Css/property.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
 <!-- HEADER -->
 <header class="header">
-  <h1 class="logo">Padpick</h1>
+  <a class="logo" href="./home.html">Pad<span>Pick</span></a>
   <nav class="navbar">
     <ul>
       <li><a href="./home.html">Home</a></li>
@@ -22,61 +23,133 @@
   </nav>
 </header>
 
+<!-- HERO -->
+<div class="page-hero">
+  <div class="hero-tag">✦ List Your Space</div>
+  <h1>Post your<br><em>property.</em></h1>
+  <p>Fill in the details below and reach thousands of potential tenants.</p>
+</div>
+
 <!-- FORM -->
 <main class="form-container">
   <div class="form-card">
-    <h2>Post Your Property</h2>
 
-    <form id="propertyForm" enctype="multipart/form-data">
+    <div class="card-top">
+      <h2>Property Details</h2>
+      <p>All fields are required unless marked optional</p>
+    </div>
 
-      <input type="text" name="name" placeholder="Surya's Home" required>
+    <div class="form-body">
+      <form id="propertyForm" enctype="multipart/form-data">
 
-      <input type="tel" name="contact_number" placeholder="Mobile number" required>
+        <!-- Basic info -->
+        <div class="section-label">Basic Info</div>
 
-      <!-- 💰 AMOUNT (no negative) -->
-      <input
-        type="number"
-        name="price"
-        placeholder="₹ Amount"
-        min="1"
-        required
-      >
+        <div class="two-col">
+          <div class="input-group">
+            <label>Property Name</label>
+            <div class="input-wrap">
+              <span class="input-icon">🏠</span>
+              <input type="text" name="name" placeholder="e.g. Surya's Home" required>
+            </div>
+          </div>
 
-      <select name="area_id" required>
-        <option value="">Select Area</option>
-        <option value="1">Anna Nagar</option>
-        <option value="2">Perungudi</option>
-        <option value="3">T Nagar</option>
-        <option value="4">Velachery</option>
-      </select>
+          <div class="input-group">
+            <label>Contact Number</label>
+            <div class="input-wrap">
+              <span class="input-icon">📞</span>
+              <input type="tel" name="contact_number" placeholder="Mobile number" required>
+            </div>
+          </div>
+        </div>
 
-      <textarea name="address" placeholder="No:9, Velachery"></textarea>
+        <div class="two-col">
+          <div class="input-group">
+            <label>Monthly Rent (₹)</label>
+            <div class="input-wrap">
+              <span class="input-icon">₹</span>
+              <input type="number" name="price" placeholder="Amount" min="1" required>
+            </div>
+          </div>
 
-      <!-- IMAGE INPUTS -->
-      <label>Upload House Image</label>
-      <input type="file" name="house_images" accept="image/*" required>
+          <div class="input-group">
+            <label>Area</label>
+            <div class="input-wrap">
+              <span class="input-icon">📍</span>
+              <select name="area_id" required>
+                <option value="">Select Area</option>
+                <option value="1">Anna Nagar</option>
+                <option value="2">Perungudi</option>
+                <option value="3">T Nagar</option>
+                <option value="4">Velachery</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
-      <label>Upload Kitchen Image</label>
-      <input type="file" name="kitchen_images" accept="image/*" required>
+        <div class="input-group">
+          <label>Full Address</label>
+          <div class="input-wrap">
+            <span class="input-icon top">🗺</span>
+            <textarea name="address" placeholder="No: 9, Velachery Main Road..."></textarea>
+          </div>
+        </div>
 
-      <label>Upload Bathroom Image</label>
-      <input type="file" name="bathroom_images" accept="image/*" required>
+        <!-- Photos -->
+        <div class="section-label">Property Photos</div>
 
-      <label>Upload Hall Image</label>
-      <input type="file" name="hall_images" accept="image/*" required>
+        <div class="file-grid">
 
-      <button type="submit" id="submitBtn">
-        Post Property
-      </button>
-    </form>
+          <div class="file-tile" id="tile-house">
+            <label for="house_images">
+              <span class="file-icon">🏠</span>
+              <span class="file-prompt">House / Front</span>
+              <span class="file-name" id="name-house"></span>
+            </label>
+            <input type="file" id="house_images" name="house_images" accept="image/*" required>
+          </div>
+
+          <div class="file-tile" id="tile-kitchen">
+            <label for="kitchen_images">
+              <span class="file-icon">🍳</span>
+              <span class="file-prompt">Kitchen</span>
+              <span class="file-name" id="name-kitchen"></span>
+            </label>
+            <input type="file" id="kitchen_images" name="kitchen_images" accept="image/*" required>
+          </div>
+
+          <div class="file-tile" id="tile-bathroom">
+            <label for="bathroom_images">
+              <span class="file-icon">🚿</span>
+              <span class="file-prompt">Bathroom</span>
+              <span class="file-name" id="name-bathroom"></span>
+            </label>
+            <input type="file" id="bathroom_images" name="bathroom_images" accept="image/*" required>
+          </div>
+
+          <div class="file-tile" id="tile-hall">
+            <label for="hall_images">
+              <span class="file-icon">🛋</span>
+              <span class="file-prompt">Hall / Living</span>
+              <span class="file-name" id="name-hall"></span>
+            </label>
+            <input type="file" id="hall_images" name="hall_images" accept="image/*" required>
+          </div>
+
+        </div>
+
+        <button type="submit" id="submitBtn">Post Property →</button>
+
+      </form>
+    </div>
   </div>
 </main>
 
 <footer class="footer">
-  <p>&copy; 2025 Padpick. All rights reserved.</p>
+  &copy; 2025 <span>PadPick</span>. All rights reserved.
 </footer>
 
-<!-- ================= JS ================= -->
+<!-- ================= JS — UNCHANGED ================= -->
 <script>
 const form = document.getElementById("propertyForm");
 const submitBtn = document.getElementById("submitBtn");
@@ -175,10 +248,25 @@ form.addEventListener("submit", async (e) => {
 /* 🔓 BUTTON RESET */
 function resetButton() {
   submitBtn.disabled = false;
-  submitBtn.innerText = "Post Property";
+  submitBtn.innerText = "Post Property →";
   submitBtn.style.opacity = "1";
   submitBtn.style.cursor = "pointer";
 }
+
+/* 📸 FILE TILE FEEDBACK */
+document.querySelectorAll(".file-tile input[type='file']").forEach(input => {
+  input.addEventListener("change", function () {
+    const tile = this.closest(".file-tile");
+    const nameEl = tile.querySelector(".file-name");
+    if (this.files && this.files[0]) {
+      tile.classList.add("selected");
+      nameEl.textContent = this.files[0].name;
+    } else {
+      tile.classList.remove("selected");
+      nameEl.textContent = "";
+    }
+  });
+});
 </script>
 
 </body>

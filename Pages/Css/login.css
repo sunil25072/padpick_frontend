@@ -1,115 +1,317 @@
-body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-size: cover;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cream: #F7F3EE;
+      --dark: #1A1A18;
+      --accent: #C8A96E;
+      --accent-light: #EDD9A3;
+      --muted: #6B6B63;
+      --border: rgba(0,0,0,0.1);
+      --danger: #D94F4F;
     }
 
-    body::before {
-      content: "";
+    body {
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── LEFT PANEL — visual ── */
+    .panel-left {
+      position: relative;
+      overflow: hidden;
+      background: var(--dark);
+    }
+
+    .panel-left::before {
+      content: '';
       position: absolute;
       inset: 0;
       background-image: url("/Asset/luxurious-villa-with-modern-architectural-design.jpg");
       background-size: cover;
       background-position: center;
-      opacity: 60%;   
-      z-index: -1;
+      opacity: 0.45;
     }
 
-    .login-container {
-      background: white;
-      padding: 100px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      width: 350px;
-      text-align: center;
+    .panel-left::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        160deg,
+        rgba(26,26,24,0.3) 0%,
+        rgba(26,26,24,0.75) 100%
+      );
     }
 
-    .login-container h1 {
-      font-size: 40px;
-      margin-bottom: 50px;
-      color: #2980b9;
-      text-align: center;
+    .panel-brand {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 44px 48px;
     }
 
-    .login-container input {
-      width: 320px;
-      padding: 15px 15px;
-      margin: 5px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    .login-container input:focus {
-      border-color: #2980b9;
-      box-shadow: 0 0 5px rgba(41,128,185,0.5);
-    }
-
-    .btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      background: linear-gradient(135deg, #f39c12, #e67e22);
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 900;
       color: white;
-      cursor: pointer;
-      margin-top: 10px;
-          }
-
-    .btn:hover {
-      transform: scale(1.06);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-
-    .login-container p {
-      margin-top: 15px;
-      font-size: 14px;
-    }
-
-    .login-container a {
-      color: #2980b9;
+      letter-spacing: -0.5px;
       text-decoration: none;
     }
 
-    .login-container a:hover {
-      text-decoration: underline;
+    .logo span { color: var(--accent); }
+
+    .brand-copy {
+      margin-bottom: 20px;
     }
 
-@media (max-width: 480px) {
+    .brand-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(200,169,110,0.4);
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
 
-  body {
-    padding: 20px;
-  }
+    .brand-copy h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 900;
+      color: white;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+    }
 
-  .login-container {
-    width: 100%;
-    max-width: 360px;
-    padding: 30px 20px;
-  }
+    .brand-copy h2 em {
+      color: var(--accent);
+      font-style: italic;
+    }
 
-  .login-container h1 {
-    font-size: 28px;
-    margin-bottom: 25px;
-  }
+    .brand-copy p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.55);
+      font-weight: 300;
+      line-height: 1.6;
+      max-width: 300px;
+    }
 
-  .login-container input {
-    width: 200px;
-    padding: 14px;
-    font-size: 14px;
-  }
+    /* stat pills */
+    .brand-stats {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
 
-  .btn {
-    width: 100%;
-    padding: 14px;
-    font-size: 15px;
-  }
+    .stat-pill {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      border-radius: 100px;
+      padding: 8px 18px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+    }
 
-  .login-container p {
-    font-size: 13px;
-  }
-}
+    .stat-pill strong {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ── RIGHT PANEL — form ── */
+    .panel-right {
+      background: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+      position: relative;
+    }
+
+    /* subtle bg texture */
+    .panel-right::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 80% 100%, rgba(200,169,110,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .form-box {
+      width: 100%;
+      max-width: 380px;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .form-header {
+      margin-bottom: 36px;
+    }
+
+    .form-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: -0.8px;
+      margin-bottom: 6px;
+    }
+
+    .form-header p {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* inputs */
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    #email, #password {
+      width: 100%;
+      padding: 14px 16px 14px 44px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--dark);
+      background: white;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    #email:focus, #password:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(200,169,110,0.15);
+    }
+
+    #email::placeholder, #password::placeholder {
+      color: #bbb;
+      font-weight: 300;
+    }
+
+    /* divider */
+    .form-divider {
+      border: none;
+      border-top: 1px solid rgba(0,0,0,0.08);
+      margin: 24px 0;
+    }
+
+    /* submit */
+    .btn {
+      width: 100%;
+      padding: 15px;
+      background: var(--dark);
+      color: var(--cream);
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.18s, box-shadow 0.18s;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(200,169,110,0.3);
+    }
+
+    .btn:disabled { cursor: not-allowed; }
+
+    /* message */
+    #message {
+      text-align: center;
+      font-size: 13px;
+      margin-top: 14px;
+      min-height: 18px;
+      font-weight: 500;
+    }
+
+    /* signup link */
+    .signup-link {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .signup-link a {
+      color: var(--dark);
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 1.5px solid var(--accent-light);
+      padding-bottom: 1px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .signup-link a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* animation */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      body { grid-template-columns: 1fr; }
+
+      .panel-left {
+        min-height: 220px;
+        flex-shrink: 0;
+      }
+
+      .brand-copy h2 { font-size: 28px; }
+      .brand-copy p { display: none; }
+      .brand-stats { display: none; }
+
+      .panel-brand { padding: 28px 28px; }
+
+      .panel-right { padding: 40px 24px; }
+
+      .form-header h1 { font-size: 28px; }
+    }

@@ -3,55 +3,97 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create Account</title>
+  <title>Create Account — PadPick</title>
+  <link rel="stylesheet" href="../Css/sign_in.css">
   <link rel="icon" href="/Asset/Screenshot_2026-02-10_215817-removebg-preview.png" type="image/x-icon">
-  <link rel="stylesheet" href="../Css/sign_in.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-  <div class="signup-container">
-    <h1>Create Account</h1>
+  <!-- LEFT: brand panel -->
+  <div class="panel-left">
+    <div class="panel-brand">
+      <a class="logo" href="../../index.html">Pad<span>Pick</span></a>
 
-    <form id="signupForm">
+      <div>
+        <div class="brand-copy">
+          <div class="brand-tag">✦ Join PadPick</div>
+          <h2>Your next<br><em>home</em> awaits.</h2>
+          <p>Create an account and start browsing hundreds of verified rental listings today.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      <div class="input-box">
-        <label>Full Name</label>
-        <input type="text" id="username" placeholder="Enter your full name" required />
+  <!-- RIGHT: signup form -->
+  <div class="panel-right">
+    <div class="form-box">
+
+      <div class="form-header">
+        <h1>Create account</h1>
+        <p>Fill in your details to get started with PadPick</p>
       </div>
 
-      <div class="input-box">
-        <label>Email</label>
-        <input type="email" id="email" placeholder="Enter your email" required />
-      </div>
+      <form id="signupForm">
 
-      <div class="input-box">
-        <label>Password</label>
-        <input type="password" id="password" placeholder="Create a password" required />
-      </div>
+        <div class="input-grid">
 
-      <div class="input-box">
-        <label>Phone number</label>
-        <input type="text" id="mobile_number" placeholder="Enter phone number" required />
-      </div>
+          <div class="input-box full">
+            <label>Full Name</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" id="username" placeholder="Your full name" required />
+            </div>
+          </div>
 
-      <div class="input-box">
-        <label>Location</label>
-        <input type="text" id="location" placeholder="Enter location" required />
-      </div>
+          <div class="input-box full">
+            <label>Email Address</label>
+            <div class="input-wrap">
+              <span class="input-icon">✉</span>
+              <input type="email" id="email" placeholder="you@email.com" required />
+            </div>
+          </div>
 
-      <button type="submit" class="btn" id="signupBtn">
-        Sign Up
-      </button>
+          <div class="input-box full">
+            <label>Password</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="password" placeholder="Create a strong password" required />
+            </div>
+          </div>
 
-      <p id="message" style="text-align:center; margin-top:10px;"></p>
+          <div class="input-box">
+            <label>Phone</label>
+            <div class="input-wrap">
+              <span class="input-icon">📞</span>
+              <input type="text" id="mobile_number" placeholder="+91 00000 00000" required />
+            </div>
+          </div>
+
+          <div class="input-box">
+            <label>Location</label>
+            <div class="input-wrap">
+              <span class="input-icon">📍</span>
+              <input type="text" id="location" placeholder="Your city" required />
+            </div>
+          </div>
+
+        </div>
+
+        <hr class="divider">
+
+        <button type="submit" class="btn" id="signupBtn">Create Account</button>
+
+        <p id="message"></p>
+
+      </form>
 
       <p class="login-text">
-        Already have an account?
-        <a href="../../index.html">Login</a>
+        Already have an account? <a href="../../index.html">Login</a>
       </p>
 
-    </form>
+    </div>
   </div>
 
 <script>

@@ -3,45 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - PadPick</title>
+  <title>Login — PadPick</title>
   <link rel="icon" href="/Asset/Screenshot_2026-02-10_215817-removebg-preview.png" type="image/x-icon">
-  <link rel="stylesheet" href="Pages/Css/login.css">
+  <link rel="stylesheet" href="./Pages/Css/login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-  <div class="login-container">
-    <h1>Login to PadPick</h1>
+  <!-- LEFT: brand panel -->
+  <div class="panel-left">
+    <div class="panel-brand">
+      <a class="logo" href="../../index.html">Pad<span>Pick</span></a>
 
-    <form id="loginForm">
-      <input
-        type="email"
-        id="email"
-        placeholder="Email"
-        required
-      >
-
-      <input
-        type="password"
-        id="password"
-        placeholder="Password"
-        required
-      >
-
-      <button type="submit" class="btn" id="loginBtn">
-        Login
-      </button>
-
-      <p id="message" style="text-align:center;color:red;"></p>
-
-      <p>
-        Don't have an account?
-        <a href="./Pages/Html/sign_in.html">Sign up</a>
-      </p>
-    </form>
+      <div>
+        <div class="brand-copy">
+          <div class="brand-tag">✦ Premium Rentals</div>
+          <h2>Find your<br>perfect <em>Stay.</em></h2>
+          <p>Browse curated properties, connect with landlords, and move in with confidence.</p>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- 🔥 LOGIN JS -->
+  <!-- RIGHT: login form -->
+  <div class="panel-right">
+    <div class="form-box">
+
+      <div class="form-header">
+        <h1>Welcome back</h1>
+        <p>Sign in to your PadPick account to continue</p>
+      </div>
+
+      <form id="loginForm">
+
+        <div class="input-group">
+          <label>Email Address</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉</span>
+            <input type="email" id="email" placeholder="you@email.com" required>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="password" placeholder="Enter your password" required>
+          </div>
+        </div>
+
+        <hr class="form-divider">
+
+        <button type="submit" class="btn" id="loginBtn">Login</button>
+
+        <p id="message"></p>
+
+      </form>
+
+      <p class="signup-link">
+        Don't have an account? <a href="./Pages/Html/sign_in.html">Sign up</a>
+      </p>
+
+    </div>
+  </div>
+
+  <!-- 🔥 LOGIN JS — UNCHANGED -->
   <script>
     const form = document.getElementById("loginForm");
     const loginBtn = document.getElementById("loginBtn");

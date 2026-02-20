@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Property</title>
-  <link rel="icon" href="/Asset/Screenshot_2026-02-10_215817-removebg-preview.png" type="image/x-icon">
+  <title>Edit Property — PadPick</title>
   <link rel="stylesheet" href="../Css/edit_property.css">
+  <link rel="icon" href="/Asset/Screenshot_2026-02-10_215817-removebg-preview.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
 
 <header class="header">
-  <h1 class="logo">Padpick</h1>
+  <a class="logo" href="./home.html">Pad<span>Pick</span></a>
   <nav class="navbar">
     <ul>
       <li><a href="./home.html">Home</a></li>
@@ -21,52 +23,142 @@
   </nav>
 </header>
 
+<!-- HERO -->
+<div class="page-hero">
+  <div class="hero-tag">✦ Manage Listing</div>
+  <h1>Edit your<br><em>property.</em></h1>
+  <p>Update only the fields you want to change — leave the rest blank.</p>
+</div>
+
 <main class="form-container">
   <div class="form-card">
-    <h2>Edit Your Property</h2>
 
-    <form id="editPropertyForm" enctype="multipart/form-data">
+    <div class="card-top">
+      <div class="edit-icon">✏️</div>
+      <div class="card-top-text">
+        <h2>Edit Property</h2>
+        <p>Only filled fields will be updated</p>
+      </div>
+    </div>
 
-      <input type="text" name="name" placeholder="Property Name">
+    <div class="form-body">
+      <form id="editPropertyForm" enctype="multipart/form-data">
 
-      <input type="tel" name="contact_number" placeholder="Mobile number">
+        <!-- Basic Info -->
+        <div class="section-label">Basic Info</div>
 
-      <input type="number" name="price" placeholder="₹ Amount">
+        <div class="two-col">
+          <div class="input-group">
+            <label>Property Name</label>
+            <div class="input-wrap">
+              <span class="input-icon">🏠</span>
+              <input type="text" name="name" placeholder="Leave blank to keep">
+            </div>
+          </div>
 
-      <select name="area_id">
-        <option value="">Select Area</option>
-        <option value="1">Anna Nagar</option>
-        <option value="2">Perungudi</option>
-        <option value="3">T Nagar</option>
-        <option value="4">Velachery</option>
-      </select>
+          <div class="input-group">
+            <label>Contact Number</label>
+            <div class="input-wrap">
+              <span class="input-icon">📞</span>
+              <input type="tel" name="contact_number" placeholder="Leave blank to keep">
+            </div>
+          </div>
+        </div>
 
-      <textarea name="address" placeholder="Address"></textarea>
+        <div class="two-col">
+          <div class="input-group">
+            <label>Monthly Rent (₹)</label>
+            <div class="input-wrap">
+              <span class="input-icon">₹</span>
+              <input type="number" name="price" placeholder="Leave blank to keep">
+            </div>
+          </div>
 
-      <!-- OPTIONAL IMAGES -->
-      <label>House Image (optional)</label>
-      <input type="file" name="house_images" accept="image/*">
+          <div class="input-group">
+            <label>Area</label>
+            <div class="input-wrap">
+              <span class="input-icon">📍</span>
+              <select name="area_id">
+                <option value="">Select Area</option>
+                <option value="1">Anna Nagar</option>
+                <option value="2">Perungudi</option>
+                <option value="3">T Nagar</option>
+                <option value="4">Velachery</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
-      <label>Kitchen Image (optional)</label>
-      <input type="file" name="kitchen_images" accept="image/*">
+        <div class="input-group">
+          <label>Full Address</label>
+          <div class="input-wrap">
+            <span class="input-icon top">🗺</span>
+            <textarea name="address" placeholder="Leave blank to keep existing address"></textarea>
+          </div>
+        </div>
 
-      <label>Bathroom Image (optional)</label>
-      <input type="file" name="bathroom_images" accept="image/*">
+        <!-- Photos -->
+        <div class="section-label">
+          Update Photos
+          <span class="optional-badge">optional</span>
+        </div>
 
-      <label>Hall Image (optional)</label>
-      <input type="file" name="hall_images" accept="image/*">
+        <div class="file-grid">
 
-      <button type="submit">Update Property</button>
-      <p id="message" style="text-align:center;color:red;"></p>
+          <div class="file-tile" id="tile-house">
+            <label for="house_images">
+              <span class="file-icon">🏠</span>
+              <span class="file-prompt">House / Front</span>
+              <span class="file-name"></span>
+            </label>
+            <input type="file" id="house_images" name="house_images" accept="image/*">
+          </div>
 
-    </form>
+          <div class="file-tile" id="tile-kitchen">
+            <label for="kitchen_images">
+              <span class="file-icon">🍳</span>
+              <span class="file-prompt">Kitchen</span>
+              <span class="file-name"></span>
+            </label>
+            <input type="file" id="kitchen_images" name="kitchen_images" accept="image/*">
+          </div>
+
+          <div class="file-tile" id="tile-bathroom">
+            <label for="bathroom_images">
+              <span class="file-icon">🚿</span>
+              <span class="file-prompt">Bathroom</span>
+              <span class="file-name"></span>
+            </label>
+            <input type="file" id="bathroom_images" name="bathroom_images" accept="image/*">
+          </div>
+
+          <div class="file-tile" id="tile-hall">
+            <label for="hall_images">
+              <span class="file-icon">🛋</span>
+              <span class="file-prompt">Hall / Living</span>
+              <span class="file-name"></span>
+            </label>
+            <input type="file" id="hall_images" name="hall_images" accept="image/*">
+          </div>
+
+        </div>
+
+        <p class="info-note">Only upload new photos if you want to replace existing ones</p>
+
+        <button type="submit">Update Property →</button>
+
+        <p id="message"></p>
+
+      </form>
+    </div>
   </div>
 </main>
 
 <footer class="footer">
-  <p>&copy; 2025 Padpick. All rights reserved.</p>
+  &copy; 2025 <span>PadPick</span>. All rights reserved.
 </footer>
 
+<!-- ================= JS — UNCHANGED ================= -->
 <script>
 const form = document.getElementById("editPropertyForm");
 const message = document.getElementById("message");
@@ -146,6 +238,21 @@ form.addEventListener("submit", async (e) => {
     console.error(err);
     message.innerText = "Backend not reachable";
   }
+});
+
+/* 📸 FILE TILE FEEDBACK */
+document.querySelectorAll(".file-tile input[type='file']").forEach(input => {
+  input.addEventListener("change", function () {
+    const tile = this.closest(".file-tile");
+    const nameEl = tile.querySelector(".file-name");
+    if (this.files && this.files[0]) {
+      tile.classList.add("selected");
+      nameEl.textContent = this.files[0].name;
+    } else {
+      tile.classList.remove("selected");
+      nameEl.textContent = "";
+    }
+  });
 });
 </script>
 

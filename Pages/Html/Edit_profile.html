@@ -3,42 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Edit Profile</title>
+<title>Edit Profile — PadPick</title>
 <link rel="icon" href="/Asset/Screenshot_2026-02-10_215817-removebg-preview.png" type="image/x-icon">
 <link rel="stylesheet" href="../Css/Edit_profile.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
 
+<a class="back-link" href="./profile.html">
+  <div class="back-arrow">←</div>
+  Back to Profile
+</a>
+
 <div class="profile-container">
-  <h2>Edit Profile</h2>
+
+  <div class="card-top">
+    <div class="edit-icon">✏️</div>
+    <h2>Edit Profile</h2>
+    <p>Update your personal information below</p>
+  </div>
 
   <form class="profile-form" id="profileForm">
+
     <div class="form-group">
       <label>Full Name</label>
-      <input type="text" id="username" placeholder="Enter name">
+      <input type="text" id="username" placeholder="Enter your full name">
     </div>
 
     <div class="form-group">
       <label>Phone</label>
-      <input type="tel" id="mobile_number" placeholder="Enter phone">
+      <input type="tel" id="mobile_number" placeholder="Enter your phone number">
     </div>
 
     <div class="form-group">
       <label>Location</label>
-      <input type="text" id="location" placeholder="Enter location">
+      <input type="text" id="location" placeholder="Enter your city or area">
     </div>
 
     <div class="form-group">
       <label>Profile Photo</label>
+      <label class="file-label" for="profile_image">
+        <div class="file-icon">🖼️</div>
+        <div class="file-text">
+          <span>Choose a photo</span>
+          <small>JPG, PNG or WEBP — max 5MB</small>
+        </div>
+      </label>
       <input type="file" id="profile_image" accept="image/*">
     </div>
+
+    <hr class="divider">
 
     <button class="save-btn" type="submit" id="saveBtn">
       Save Changes
     </button>
 
-    <p id="message" style="text-align:center;color:red;"></p>
+    <p id="message"></p>
+
   </form>
 </div>
 
@@ -143,6 +166,16 @@ function resetButton() {
   saveBtn.style.opacity = "1";
   saveBtn.style.cursor = "pointer";
 }
+
+// Show selected filename in file input label
+document.getElementById("profile_image").addEventListener("change", function () {
+  const fileText = this.closest(".form-group").querySelector(".file-text span");
+  if (this.files.length > 0) {
+    fileText.textContent = this.files[0].name;
+  } else {
+    fileText.textContent = "Choose a photo";
+  }
+});
 </script>
 
 </body>

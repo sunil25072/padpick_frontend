@@ -3,54 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Choose Area</title>
-    <link rel="icon" href="/Asset/Screenshot_2026-02-10_215817-removebg-preview.png" type="image/x-icon">
+    <title>Choose Area — PadPick</title>
     <link rel="stylesheet" href="../Css/Areas.css">
+    <link rel="icon" href="/Asset/Screenshot_2026-02-10_215817-removebg-preview.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
 </head>
 <body>
-    <header>
-    <h1>Choose your area</h1>
+
+<header>
+    <a class="logo" href="./home.html">Pad<span>Pick</span></a>
     <nav class="navbar">
         <ul>
             <li><a href="./home.html">Home</a></li>
-            <li><a href="./Areas.html">Areas</a></li>
+            <li><a href="./Areas.html" class="active">Areas</a></li>
             <li><a href="./profile.html">Profile</a></li>
         </ul>
     </nav>
-    </header>
-<div class="container">
-    <div class="area-card">
-    <a href="./subareas.html?area_id=4">
-        <img src="../../Asset/Velachery.jpg" alt="Velachery">
-    </a>
-    <a href="./subareas.html?area_id=4">Velachery</a>
+</header>
+
+<!-- Hero strip -->
+<div class="page-hero">
+    <div class="hero-tag">✦ Chennai</div>
+    <h1>Choose your<br><em>area.</em></h1>
+    <p>Browse verified rentals and PGs across Chennai's top neighbourhoods.</p>
 </div>
 
-<div class="area-card">
-    <a href="./subareas.html?area_id=1">
-        <img src="../../Asset/Anna nagar.jpg" alt="Anna Nagar">
-    </a>
-    <a href="./subareas.html?area_id=1">Anna Nagar</a>
-</div>
+<main>
+    <div class="section-meta">
+        <h2>Available Areas</h2>
+        <span>4 locations</span>
+    </div>
 
-<div class="area-card">
-    <a href="./subareas.html?area_id=3">
-        <img src="../../Asset/T-nagar.jpg" alt="T Nagar">
-    </a>
-    <a href="./subareas.html?area_id=3">T Nagar</a>
-</div>
+    <div class="container">
 
-<div class="area-card">
-    <a href="./subareas.html?area_id=2">
-        <img src="../../Asset/perungudi.jpg" alt="Perungudi">
-    </a>
-    <a href="./subareas.html?area_id=2">Perungudi</a>
-</div>
-</div>
+        <div class="area-card">
+            <a class="card-link" href="./subareas.html?area_id=4"></a>
+            <div class="card-img-wrap">
+                <img src="../../Asset/Velachery.jpg" alt="Velachery">
+            </div>
+            <div class="card-footer">
+                <a class="area-name" href="./subareas.html?area_id=4">Velachery</a>
+                <div class="card-arrow">→</div>
+            </div>
+        </div>
 
-<a href="./home.html" class="back-btn">Back to Home</a>
-    <footer id="copy">
-            <p>&copy;2025 Padpick. All rights Reserved</p>
-    </footer>
+        <div class="area-card">
+            <a class="card-link" href="./subareas.html?area_id=1"></a>
+            <div class="card-img-wrap">
+                <img src="../../Asset/Anna nagar.jpg" alt="Anna Nagar">
+            </div>
+            <div class="card-footer">
+                <a class="area-name" href="./subareas.html?area_id=1">Anna Nagar</a>
+                <div class="card-arrow">→</div>
+            </div>
+        </div>
+
+        <div class="area-card">
+            <a class="card-link" href="./subareas.html?area_id=3"></a>
+            <div class="card-img-wrap">
+                <img src="../../Asset/T-nagar.jpg" alt="T Nagar">
+            </div>
+            <div class="card-footer">
+                <a class="area-name" href="./subareas.html?area_id=3">T Nagar</a>
+                <div class="card-arrow">→</div>
+            </div>
+        </div>
+
+        <div class="area-card">
+            <a class="card-link" href="./subareas.html?area_id=2"></a>
+            <div class="card-img-wrap">
+                <img src="../../Asset/perungudi.jpg" alt="Perungudi">
+            </div>
+            <div class="card-footer">
+                <a class="area-name" href="./subareas.html?area_id=2">Perungudi</a>
+                <div class="card-arrow">→</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="back-wrap">
+        <a href="./home.html" class="back-btn">← Back to Home</a>
+    </div>
+</main>
+
+<footer>
+    &copy; 2025 <span>PadPick</span>. All rights reserved.
+</footer>
+
 </body>
 </html>

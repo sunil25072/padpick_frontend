@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Home Details</title>
-  <link rel="icon" href="/Asset/Screenshot_2026-02-10_215817-removebg-preview.png" type="image/x-icon">
+  <title>Home Details — PadPick</title>
   <link rel="stylesheet" href="../Css/Pg&Areas.css">
+  <link rel="icon" href="/Asset/Screenshot_2026-02-10_215817-removebg-preview.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
 
-<!-- ================= HEADER ================= -->
+<!-- HEADER -->
 <header>
+  <a class="logo" href="./home.html">Pad<span>Pick</span></a>
   <h1 id="homeTitle">Loading...</h1>
   <nav class="navbar">
     <ul>
@@ -22,51 +25,95 @@
   </nav>
 </header>
 
-<!-- ================= MAIN CARD ================= -->
+<!-- MAIN -->
 <div class="container">
+
+  <!-- breadcrumb -->
+  <div class="breadcrumb">
+    <a href="./Areas.html">Areas</a>
+    <span>/</span>
+    <a href="javascript:history.back()">Listings</a>
+    <span>/</span>
+    <span id="breadName">Details</span>
+  </div>
+
   <div class="pg-card">
 
     <!-- MAIN IMAGE -->
-    <img id="mainImg" src="" alt="PG Room">
+    <div class="main-img-wrap">
+      <img id="mainImg" src="" alt="PG Room">
+    </div>
 
-    <!-- THUMBNAILS + DETAILS -->
+    <!-- BOTTOM PANEL -->
     <div class="thumbnails">
 
-      <a href="#img1"><img id="thumb1"></a>
-      <a href="#img2"><img id="thumb2"></a>
-      <a href="#img3"><img id="thumb3"></a>
+      <!-- Left: thumbnails + back -->
+      <div class="thumb-col">
+        <div class="thumb-label">More Photos</div>
+        <div class="thumb-row">
+          <a href="#img1"><img id="thumb1" alt="Photo 1"></a>
+          <a href="#img2"><img id="thumb2" alt="Photo 2"></a>
+          <a href="#img3"><img id="thumb3" alt="Photo 3"></a>
+        </div>
+        <a href="javascript:history.back()" class="back-btn">← Go Back</a>
+      </div>
 
-      <p><strong>Rent:</strong> ₹<span id="price"></span>/month</p>
-      <p><strong>Facilities:</strong> <span id="facilities"></span></p>
-      <p><strong>Address:</strong> <span id="address"></span></p>
-      <p><strong>Contact no:</strong> <span id="contact"></span></p>
+      <!-- Right: details -->
+      <div class="details-col">
+        <div class="detail-label">Property Details</div>
 
-      <a href="javascript:history.back()" class="back-btn">Go Back</a>
+        <div class="price-row">
+          <span class="price-currency">₹</span>
+          <span class="price-amount" id="price">—</span>
+          <span class="price-per">/ month</span>
+        </div>
+
+        <div class="info-stack">
+          <div class="info-tile">
+            <div class="tile-label">Facilities</div>
+            <div class="tile-value" id="facilities">—</div>
+          </div>
+          <div class="info-tile">
+            <div class="tile-label">Address</div>
+            <div class="tile-value" id="address">—</div>
+          </div>
+        </div>
+
+        <div class="info-tile" style="margin-bottom:20px;">
+          <div class="tile-label">Contact</div>
+          <div class="tile-value contact-num" id="contact">—</div>
+        </div>
+
+        <a href="#" class="contact-btn" id="callBtn">
+          📞 Call Owner
+        </a>
+      </div>
+
     </div>
   </div>
 </div>
 
-<!-- ================= LIGHTBOX ================= -->
+<!-- LIGHTBOXES -->
 <div class="lightbox" id="img1">
-  <a href="#">&times;</a>
-  <img id="lb1">
+  <a href="#" class="close">&times;</a>
+  <img id="lb1" alt="Photo 1">
 </div>
 
 <div class="lightbox" id="img2">
-  <a href="#">&times;</a>
-  <img id="lb2">
+  <a href="#" class="close">&times;</a>
+  <img id="lb2" alt="Photo 2">
 </div>
 
 <div class="lightbox" id="img3">
-  <a href="#">&times;</a>
-  <img id="lb3">
+  <a href="#" class="close">&times;</a>
+  <img id="lb3" alt="Photo 3">
 </div>
 
-<footer id="copy">
-  <p>&copy;2025 Padpick All rights Reserved</p>
+<footer>
+  &copy; 2025 <span>PadPick</span>. All rights reserved.
 </footer>
 
-<!-- ================= JS ================= -->
+<!-- ================= JS — UNCHANGED ================= -->
 <script>
 const params = new URLSearchParams(window.location.search);
 const homeId = params.get("home_id");
@@ -89,6 +136,14 @@ fetch(`https://padpick-backend.vercel.app/homes/${homeId}`)
     document.getElementById("facilities").innerText = data.description || "—";
     document.getElementById("address").innerText = data.address;
     document.getElementById("contact").innerText = data.contact_number;
+
+    // extra: update breadcrumb name & call button href
+    const breadName = document.getElementById("breadName");
+    if (breadName) breadName.innerText = data.name;
+    const callBtn = document.getElementById("callBtn");
+    if (callBtn && data.contact_number) {
+      callBtn.href = "tel:" + data.contact_number;
+    }
 
     if (!data.images || !data.images[0]) return;
 

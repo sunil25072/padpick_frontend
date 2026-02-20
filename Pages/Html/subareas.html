@@ -3,37 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velachery - PG & Homes</title>
-    <link rel="icon" href="/Asset/Screenshot_2026-02-10_215817-removebg-preview.png" type="image/x-icon">
+    <title>Browse Area — PadPick</title>
     <link rel="stylesheet" href="../Css/subareas.css">
-</head>
-<body>
+    <link rel="icon" href="/Asset/Screenshot_2026-02-10_215817-removebg-preview.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
-<!-- HEADER -->
 </head>
 <body>
 
 <header>
-    <h1>Padpick</h1>
+    <a class="logo" href="./home.html">Pad<span>Pick</span></a>
     <nav class="navbar">
         <ul>
             <li><a href="./home.html">Home</a></li>
-            <li><a href="./Areas.html">Areas</a></li>
+            <li><a href="./Areas.html" class="active">Areas</a></li>
             <li><a href="./profile.html">Profile</a></li>
         </ul>
     </nav>
 </header>
 
+<!-- Hero -->
+<div class="page-hero">
+    <div class="hero-tag">✦ Browse Listings</div>
+    <h1>Homes &amp; PGs in<br><em id="heroAreaName">your area.</em></h1>
+    <p>Explore verified properties available for rent right now.</p>
+</div>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+    <a href="./Areas.html">← Areas</a>
+    <span>/</span>
+    <span id="breadArea">Loading...</span>
+</div>
+
+<!-- Main -->
 <div class="container">
-    <div id="areaTitle" class="title">Loading...</div>
+    <div class="section-meta">
+        <div id="areaTitle">Loading...</div>
+        <div class="listing-count" id="listingCount"></div>
+    </div>
+
+    <!-- Skeleton loader shown while fetching -->
+    <div class="skeleton-grid" id="skeletonLoader">
+        <div class="skeleton-card">
+            <div class="skeleton-img"></div>
+            <div class="skeleton-body">
+                <div class="skeleton-line"></div>
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-btn"></div>
+            </div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skeleton-img"></div>
+            <div class="skeleton-body">
+                <div class="skeleton-line"></div>
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-btn"></div>
+            </div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skeleton-img"></div>
+            <div class="skeleton-body">
+                <div class="skeleton-line"></div>
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-btn"></div>
+            </div>
+        </div>
+    </div>
 
     <div id="pgList" class="pg-list"></div>
-
     <div id="msg" class="message"></div>
+
+    <div class="back-wrap">
+        <a href="./Areas.html" class="back-btn">← Back to Areas</a>
+    </div>
 </div>
 
 <footer>
-    &copy; 2025 Padpick. All rights reserved.
+    &copy; 2025 <span>PadPick</span>. All rights reserved.
 </footer>
 
 <script>
@@ -59,39 +106,53 @@ const areaNames = {
 
 title.innerText = areaNames[areaId] || "Homes";
 
+// Update hero and breadcrumb with area name
+const areaLabel = areaNames[areaId] || "this area";
+document.getElementById("heroAreaName").innerText = areaLabel + ".";
+document.getElementById("breadArea").innerText = areaLabel;
 
 fetch(`https://padpick-backend.vercel.app/homes/by-area/${areaId}`)
   .then(res => res.json())
   .then(data => {
+
+    // hide skeleton
+    document.getElementById("skeletonLoader").style.display = "none";
 
     if (!Array.isArray(data) || data.length === 0) {
       msg.innerText = "No homes found in this area";
       return;
     }
 
+    // update count
+    document.getElementById("listingCount").innerText = data.length + " listing" + (data.length !== 1 ? "s" : "");
+
     list.innerHTML = "";
 
-    data.forEach(home => {
-      list.innerHTML += `
-        <div class="pg-card">
+    data.forEach((home, i) => {
+      const card = document.createElement("div");
+      card.className = "pg-card";
+      card.style.animationDelay = (i * 0.07) + "s";
+      card.innerHTML = `
+        <div class="img-wrap">
           <img src="${home.img1}" alt="${home.name}" />
-          <div class="content">
-            <h3>${home.name}</h3>
-            <p>₹ ${home.price} / month</p>
-            <a href="./Pg&Areas.html?home_id=${home.id}" class="btn">
-              View Details
-            </a>
-          </div>
+          <div class="price-badge">₹ ${home.price} / month</div>
+        </div>
+        <div class="content">
+          <h3>${home.name}</h3>
+          <a href="./Pg&Areas.html?home_id=${home.id}" class="btn">
+            View Details →
+          </a>
         </div>
       `;
+      list.appendChild(card);
     });
   })
   .catch(err => {
     console.error(err);
+    document.getElementById("skeletonLoader").style.display = "none";
     msg.innerText = "Backend not reachable";
   });
 </script>
-
 
 </body>
 </html>
