@@ -12,7 +12,7 @@
     }
 
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Poppins', sans-serif;
       background: var(--cream);
       color: var(--dark);
       min-height: 100vh;
@@ -35,7 +35,7 @@
     }
 
     .logo {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Poppins', sans-serif;
       font-size: 24px;
       font-weight: 900;
       color: var(--dark);
@@ -93,7 +93,7 @@
     }
 
     .page-hero h1 {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Poppins', sans-serif;
       font-size: clamp(30px, 4.5vw, 50px);
       font-weight: 900;
       color: white;
@@ -136,7 +136,7 @@
     }
 
     .card-top h2 {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Poppins', sans-serif;
       font-size: 24px;
       font-weight: 700;
       color: white;
@@ -213,7 +213,7 @@
       padding: 13px 14px 13px 40px;
       border: 1.5px solid var(--border);
       border-radius: 12px;
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Poppins', sans-serif;
       font-size: 14px;
       color: var(--dark);
       background: var(--cream);
@@ -336,7 +336,7 @@
       color: var(--cream);
       border: none;
       border-radius: 12px;
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Poppins', sans-serif;
       font-size: 15px;
       font-weight: 500;
       cursor: pointer;
