@@ -105,6 +105,7 @@
             <label for="house_images">
               <span class="file-icon">🏠</span>
               <span class="file-prompt">House / Front</span>
+              <span class="file-prompt">max 10mb</span>
               <span class="file-name" id="name-house"></span>
             </label>
             <input type="file" id="house_images" name="house_images" accept="image/*" required>
@@ -114,6 +115,7 @@
             <label for="kitchen_images">
               <span class="file-icon">🍳</span>
               <span class="file-prompt">Kitchen</span>
+              <span class="file-prompt">max 10mb</span>
               <span class="file-name" id="name-kitchen"></span>
             </label>
             <input type="file" id="kitchen_images" name="kitchen_images" accept="image/*" required>
@@ -123,6 +125,7 @@
             <label for="bathroom_images">
               <span class="file-icon">🚿</span>
               <span class="file-prompt">Bathroom</span>
+              <span class="file-prompt">max 10mb</span>
               <span class="file-name" id="name-bathroom"></span>
             </label>
             <input type="file" id="bathroom_images" name="bathroom_images" accept="image/*" required>
@@ -132,6 +135,7 @@
             <label for="hall_images">
               <span class="file-icon">🛋</span>
               <span class="file-prompt">Hall / Living</span>
+              <span class="file-prompt">max 10mb</span>
               <span class="file-name" id="name-hall"></span>
             </label>
             <input type="file" id="hall_images" name="hall_images" accept="image/*" required>
@@ -244,7 +248,7 @@ form.addEventListener("submit", async (e) => {
 
   } catch (err) {
     console.error(err);
-    alert("Backend not reachable");
+    alert("Your images are out of 10mb  ");
     resetButton();
   }
 });
