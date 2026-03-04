@@ -140,6 +140,7 @@
         </div>
 
         <button type="submit" id="submitBtn">Post Property →</button>
+        <p id="message"></p>
 
       </form>
     </div>
@@ -236,7 +237,9 @@ form.addEventListener("submit", async (e) => {
     }
 
     /* ✅ SUCCESS */
-    alert("Property posted successfully 🎉");
+    message.style.color="green";
+    message.innerText="property uploaded successfully"
+
     window.location.href = `./Pg&Areas.html?home_id=${data.home_id}`;
 
   } catch (err) {
